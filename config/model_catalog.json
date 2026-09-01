@@ -1,0 +1,11 @@
+{
+  "provider": "gemai",
+  "base_url": "https://api.gemai.cc/v1",
+  "roles": {
+    "fast_structured": "gemini-2.5-flash",
+    "research": "gemini-2.5-pro",
+    "synthesis": "gemini-2.5-pro",
+    "judge": "claude-sonnet-5"
+  },
+  "key_present": false
+}

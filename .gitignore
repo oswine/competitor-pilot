@@ -1,0 +1,54 @@
+# Secrets and local environment overrides
+.env
+.env.*
+!.env.example
+frontend/.env*
+!frontend/.env.example
+
+# Python caches, test coverage, and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.venv/
+venv/
+
+# Node/Next.js generated files
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+node_modules/
+
+# Local runtime state and generated reports
+data/*
+!data/.gitkeep
+*.log
+*.pid
+*.db
+*.sqlite
+*.sqlite3
+test-results/
+playwright-report/
+
+# Native service installations and service-local state
+services/postgresql/pgsql/
+
+# Generated benchmark build metadata
+benchmarks/**/__pycache__/
+benchmarks/ci_real/.build-ledger/
+# Full third-party web captures stay local; publish cleaned snapshots and hashes.
+benchmarks/ci_real/snapshots/*.raw
+
+# Build and editor metadata
+dist/
+build/
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+Desktop.ini

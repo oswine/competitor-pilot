@@ -1,0 +1,63 @@
+{
+  "dataset": "CI-Real30",
+  "version": "1.0.0",
+  "generated_at": "2026-08-30T12:44:23.100315+00:00",
+  "case_count": 30,
+  "source_count": 42,
+  "official_source_count": 33,
+  "corroboration_source_count": 9,
+  "track_counts": {
+    "real_ai": 6,
+    "real_enterprise": 6,
+    "real_pricing": 6,
+    "real_security": 6,
+    "real_verify": 6
+  },
+  "cases_sha256": "sha256:ffd035215302df1cf88c6a8091460f5ad3cb2182dafd2954f91d867ef05e4e5d",
+  "upstream": {
+    "name": "ComparEdge Awesome SaaS Comparison Data",
+    "repository": "https://github.com/comparedge/awesome-saas-comparison-data",
+    "commit": "cd518965af74332e47cc5145074c41742834d6b3",
+    "license": "CC BY 4.0",
+    "attribution": "Data from ComparEdge (comparedge.com)"
+  },
+  "products": [
+    "Notion",
+    "Coda",
+    "Asana",
+    "monday.com",
+    "ClickUp",
+    "Linear",
+    "Jira",
+    "GitHub",
+    "GitLab",
+    "Slack",
+    "Microsoft Teams"
+  ],
+  "pairs": [
+    [
+      "Notion",
+      "Coda"
+    ],
+    [
+      "Asana",
+      "monday.com"
+    ],
+    [
+      "ClickUp",
+      "Linear"
+    ],
+    [
+      "Linear",
+      "Jira"
+    ],
+    [
+      "GitHub",
+      "GitLab"
+    ],
+    [
+      "Slack",
+      "Microsoft Teams"
+    ]
+  ]
+}

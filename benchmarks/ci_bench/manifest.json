@@ -1,0 +1,195 @@
+{
+  "dataset": "CI-Bench",
+  "version": "v0",
+  "generated_at": "2026-08-24T16:42:05Z",
+  "case_count": 100,
+  "track_counts": {
+    "change_detection": 30,
+    "fact_extraction": 25,
+    "research_synthesis": 20,
+    "routing": 15,
+    "reliability_security": 10
+  },
+  "split_counts": {
+    "test": 100
+  },
+  "evidence_mode": "synthetic_offline",
+  "cases_sha256": "d2b44ebab5b40ab375f99365260325a47179c1b2aa37ddce9752828151ebb779",
+  "generator": "generate_ci_bench.py",
+  "eval_coverage": {
+    "outcome_metrics": {
+      "values": [
+        "bounded_attempts",
+        "citation_completeness",
+        "citation_exists",
+        "claim_value_normalized",
+        "complexity_exact",
+        "contradiction_count",
+        "debate_gate_exact",
+        "event_type_exact",
+        "evidence_pair_present",
+        "expected_failure_behavior",
+        "finding_coverage",
+        "forbidden_agents_absent",
+        "materiality_exact",
+        "must_not_invariant",
+        "required_agents_present",
+        "required_fields_exact",
+        "route_kind_exact",
+        "schema_valid",
+        "unknowns_present",
+        "unknowns_preserved"
+      ],
+      "case_count": {
+        "bounded_attempts": 10,
+        "citation_completeness": 20,
+        "citation_exists": 25,
+        "claim_value_normalized": 25,
+        "complexity_exact": 15,
+        "contradiction_count": 20,
+        "debate_gate_exact": 15,
+        "event_type_exact": 30,
+        "evidence_pair_present": 30,
+        "expected_failure_behavior": 10,
+        "finding_coverage": 20,
+        "forbidden_agents_absent": 15,
+        "materiality_exact": 30,
+        "must_not_invariant": 10,
+        "required_agents_present": 15,
+        "required_fields_exact": 30,
+        "route_kind_exact": 15,
+        "schema_valid": 100,
+        "unknowns_present": 20,
+        "unknowns_preserved": 25
+      }
+    },
+    "trace_assertions": {
+      "values": [
+        "activate_only_selected_agents",
+        "build_evidence_cards",
+        "emit_change_event",
+        "failure_or_attack_observed",
+        "fetch",
+        "fetch_source",
+        "guard_or_retry_recorded",
+        "plan",
+        "read_after_snapshot",
+        "read_before_snapshot",
+        "return_bounded_trajectory",
+        "route_once",
+        "run_citation_check",
+        "search",
+        "synthesize_report",
+        "terminal_state_recorded",
+        "validate_structured_output",
+        "verify_findings"
+      ],
+      "case_count": {
+        "activate_only_selected_agents": 15,
+        "build_evidence_cards": 20,
+        "emit_change_event": 30,
+        "failure_or_attack_observed": 10,
+        "fetch": 20,
+        "fetch_source": 25,
+        "guard_or_retry_recorded": 10,
+        "plan": 20,
+        "read_after_snapshot": 30,
+        "read_before_snapshot": 30,
+        "return_bounded_trajectory": 15,
+        "route_once": 15,
+        "run_citation_check": 25,
+        "search": 20,
+        "synthesize_report": 20,
+        "terminal_state_recorded": 10,
+        "validate_structured_output": 25,
+        "verify_findings": 20
+      }
+    },
+    "security_assertions": {
+      "values": [
+        "browser_context_isolated",
+        "egress_allowlist_enforced",
+        "human_approval_required",
+        "private_address_blocked",
+        "prompt_injection_blocked",
+        "robots_policy_respected",
+        "secret_redaction",
+        "tenant_scope_rechecked_in_tool",
+        "tool_result_not_treated_as_instructions",
+        "untrusted_web_content_is_data"
+      ],
+      "case_count": {
+        "browser_context_isolated": 5,
+        "egress_allowlist_enforced": 1,
+        "human_approval_required": 1,
+        "private_address_blocked": 1,
+        "prompt_injection_blocked": 1,
+        "robots_policy_respected": 5,
+        "secret_redaction": 1,
+        "tenant_scope_rechecked_in_tool": 9,
+        "tool_result_not_treated_as_instructions": 1,
+        "untrusted_web_content_is_data": 100
+      }
+    },
+    "resilience_assertions": {
+      "values": [
+        "cache_hit_avoids_duplicate_fetch",
+        "compaction_preserves_verified_findings",
+        "concurrency_limit_respected",
+        "model_fallback_without_retry_multiplication",
+        "output_retry_or_rejection",
+        "oversized_tool_output_bounded_or_spilled",
+        "step_resume_idempotent",
+        "tool_retry_bounded",
+        "transport_retry_bounded"
+      ],
+      "case_count": {
+        "cache_hit_avoids_duplicate_fetch": 5,
+        "compaction_preserves_verified_findings": 7,
+        "concurrency_limit_respected": 7,
+        "model_fallback_without_retry_multiplication": 1,
+        "output_retry_or_rejection": 1,
+        "oversized_tool_output_bounded_or_spilled": 7,
+        "step_resume_idempotent": 1,
+        "tool_retry_bounded": 1,
+        "transport_retry_bounded": 6
+      }
+    },
+    "artifact_assertions": {
+      "values": [
+        "agent_activation_recorded",
+        "content_hash_verified",
+        "dom_locator_present",
+        "dom_locator_resolves_against_snapshot",
+        "evidence_cards_retained",
+        "failure_trace_retained",
+        "near_duplicate_sources_collapsed",
+        "pdf_page_locator_present",
+        "raw_snapshot_retained",
+        "recorded_tool_result_replayable",
+        "route_recorded",
+        "source_dedup_checked",
+        "source_locator_present",
+        "terminal_state_retained",
+        "verified_findings_retained"
+      ],
+      "case_count": {
+        "agent_activation_recorded": 15,
+        "content_hash_verified": 55,
+        "dom_locator_present": 30,
+        "dom_locator_resolves_against_snapshot": 30,
+        "evidence_cards_retained": 20,
+        "failure_trace_retained": 10,
+        "near_duplicate_sources_collapsed": 20,
+        "pdf_page_locator_present": 9,
+        "raw_snapshot_retained": 30,
+        "recorded_tool_result_replayable": 9,
+        "route_recorded": 15,
+        "source_dedup_checked": 20,
+        "source_locator_present": 25,
+        "terminal_state_retained": 10,
+        "verified_findings_retained": 20
+      }
+    }
+  }
+}

@@ -1,0 +1,1735 @@
+{
+  "attribution": "Data from ComparEdge (comparedge.com)",
+  "license": "CC BY 4.0",
+  "repository": "https://github.com/comparedge/awesome-saas-comparison-data",
+  "commit": "cd518965af74332e47cc5145074c41742834d6b3",
+  "records": {
+    "Notion": {
+      "slug": "notion",
+      "name": "Notion",
+      "url": "https://www.notion.com",
+      "category": "project-management",
+      "subcategories": [
+        "docs",
+        "databases",
+        "wiki",
+        "project-tracking",
+        "notes"
+      ],
+      "description": "All-in-one workspace for notes, docs, databases, and project management",
+      "pricing": {
+        "free": true,
+        "plans": [
+          {
+            "name": "Free",
+            "price": 0,
+            "period": "user/mo",
+            "highlights": [
+              "Unlimited pages for individuals",
+              "7-day page history",
+              "10 guest limit"
+            ]
+          },
+          {
+            "name": "Plus",
+            "price": 12,
+            "period": "user/mo",
+            "highlights": [
+              "Unlimited file uploads",
+              "30-day page history",
+              "Unlimited guests"
+            ]
+          },
+          {
+            "name": "Business",
+            "price": 18,
+            "period": "user/mo",
+            "highlights": [
+              "SAML SSO",
+              "Private teamspaces",
+              "Advanced permissions"
+            ]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "period": "user/mo",
+            "highlights": [
+              "SCIM",
+              "Audit log",
+              "Custom data retention"
+            ]
+          }
+        ]
+      },
+      "features": [
+        "Docs & Pages",
+        "Databases",
+        "Wiki",
+        "Kanban Boards",
+        "Calendar View",
+        "Timeline View",
+        "Templates",
+        "API & Integrations",
+        "AI Assistant",
+        "Web Publishing",
+        "Forms",
+        "Automations",
+        "Real-time Collaboration",
+        "Mobile Apps",
+        "Offline Mode",
+        "Customizable Block Templates",
+        "Drag and Drop Interface",
+        "Task Assignment Notifications",
+        "Page Linking System",
+        "Icon and Emoji Support",
+        "Customizable Themes",
+        "Advanced Search Filters",
+        "Page Revision History",
+        "Collaborator Permission Controls",
+        "Comment and Mention System",
+        "Integrated File Storage",
+        "Custom Database Filters",
+        "Automated Backup System",
+        "Conditional Formatting Rules",
+        "In App Video Recording",
+        "Screen Recording Tool",
+        "Customizable Keyboard Shortcuts"
+      ],
+      "rating": {
+        "g2": 4.7,
+        "capterra": 4.7
+      },
+      "founded": 2016,
+      "hq": "San Francisco, CA",
+      "users": "100M+",
+      "affiliate": {
+        "url": "https://www.notion.com/affiliates",
+        "commission": "50% recurring for 12 months",
+        "network": "Direct"
+      },
+      "youtubeId": "mb5WOjwXa6c",
+      "longDescription": "Built around the idea that documents, databases, and wikis shouldn't live in separate apps, Notion lets you structure information exactly how your team thinks. Remote teams and knowledge workers use it to replace scattered Google Docs, Confluence wikis, and Trello boards with a single linked workspace. You can build anything from a company handbook to a product roadmap using nested pages, relational databases, and kanban views - all without touching code. Where Notion stands out is its block-based flexibility: every piece of content is a movable, reusable block, making it easy to repurpose content across pages. The learning curve is real - new users often spend hours figuring out what they're supposed to build before they build it. And while Notion has improved its performance, large databases can still feel sluggish on slower connections. It's not the right tool if you need real-time task notifications or time-tracking out of the box. Best suited for content teams, early-stage startups, and solo creators who want one place for their thinking, writing, and planning. Teams coming from heavy project management tools like Jira may find it too freeform for sprint planning.",
+      "featureCount": 32,
+      "normalizedFeatures": {
+        "Task Management": true,
+        "Kanban Boards": true,
+        "Gantt Charts": false,
+        "Time Tracking": false,
+        "Sprints/Scrum": false,
+        "Roadmaps": false,
+        "Automation": true,
+        "Reporting/Analytics": false,
+        "Custom Workflows": true,
+        "API/Integrations": true,
+        "Mobile App": true,
+        "Resource Management": false,
+        "Dependencies": true,
+        "Goals/OKRs": false,
+        "Forms": true,
+        "Guest Access": true,
+        "File Sharing": true,
+        "Comments/Mentions": false,
+        "Templates": true,
+        "Calendar View": true
+      },
+      "pros": [
+        "Free plan available",
+        "Affordable starting at $12/mo",
+        "Highly rated (4.7/5 on review platforms)",
+        "32 key features including Docs & Pages and Databases",
+        "Large user base (100M+)"
+      ],
+      "cons": [
+        "Can feel overwhelming for simple projects",
+        "Some advanced features locked behind higher tiers"
+      ],
+      "youtubeReview": "https://www.youtube.com/watch?v=2LUSD0R4cfU",
+      "useCases": [
+        {
+          "title": "Sprint Planning With Linked Docs",
+          "description": "Embed acceptance criteria and design specs inside Kanban Board cards so engineers see full context without tab-switching during active sprints.",
+          "icon": "layers"
+        },
+        {
+          "title": "Build a Living Project Wiki",
+          "description": "The Wiki feature centralizes runbooks, decision logs, and architectural patterns alongside active tasks - new hires onboard faster with context sitting next to the work.",
+          "icon": "edit"
+        }
+      ],
+      "youtubeUploadDate": "2024-12-17T23:00:42Z",
+      "pricingAnalysis": {
+        "overview": "Notion - All-in-one workspace for notes, docs, databases, and project management. The free tier gets you Unlimited pages for individuals, 7-day page history, 10 guest limit - a real plan, not a 14-day trial. Upgrading to Plus ($12/user/mo) unlocks Unlimited file uploads and 30-day page history. Priced near the $11/mo category average, Notion competes directly with Height and Miro on value.",
+        "planAdvice": [
+          {
+            "plan": "Free",
+            "price": 0,
+            "period": "user/mo",
+            "advice": "You get Unlimited pages for individuals, 7-day page history, 10 guest limit. What's locked behind the paywall: unlimited file uploads, 30-day page history, unlimited guests. If those matter, Plus at $12/user/mo is the next step. Good enough for solo use and evaluation."
+          },
+          {
+            "plan": "Plus",
+            "price": 12,
+            "period": "user/mo",
+            "advice": "$12/user/mo gets you Unlimited file uploads, 30-day page history, Unlimited guests. Team of 5 = $60/mo, team of 10 = $120/mo. The sweet spot for professionals who've maxed out the free plan and need Unlimited file uploads, 30-day page history."
+          },
+          {
+            "plan": "Business",
+            "price": 18,
+            "period": "user/mo",
+            "advice": "$18/user/mo gets you SAML SSO, Private teamspaces, Advanced permissions. Team of 5 = $90/mo, team of 10 = $180/mo. 50% more than Plus - justified only if you need the extras. At this price point, also evaluate Height."
+          },
+          {
+            "plan": "Enterprise",
+            "price": null,
+            "period": "user/mo",
+            "advice": "Custom pricing for SCIM, Audit log, Custom data retention. Always negotiate - ask for pilot pricing if testing with <50 seats, and push for annual discount commitments. Compare enterprise quotes against Height's equivalent tier."
+          }
+        ],
+        "verdict": "Notion scores 4.7/5 and offers a free plan - that's a rare combination. The free tier with Unlimited pages for individuals and 7-day page history is more than enough to validate whether it fits your workflow. Start free. Move to Plus ($12/user/mo) when Unlimited file uploads becomes a need, not a want."
+      },
+      "expertTake": "Worth it if you live in docs — the Databases + Wiki combo turns scattered notes into a real knowledge base. Skip it if your team needs strict task ownership; it's built for thinkers, not project trackers.",
+      "bestFor": "Remote Knowledge Workers"
+    },
+    "ClickUp": {
+      "slug": "clickup",
+      "name": "ClickUp",
+      "url": "https://clickup.com",
+      "category": "project-management",
+      "subcategories": [
+        "tasks",
+        "docs",
+        "goals",
+        "time-tracking"
+      ],
+      "description": "All-in-one productivity platform replacing multiple work tools",
+      "pricing": {
+        "free": true,
+        "plans": [
+          {
+            "name": "Free",
+            "price": 0,
+            "period": "forever",
+            "highlights": [
+              "Unlimited tasks",
+              "Unlimited members",
+              "60MB storage"
+            ]
+          },
+          {
+            "name": "Unlimited",
+            "price": 7,
+            "period": "user/mo",
+            "highlights": [
+              "Unlimited storage",
+              "Unlimited integrations",
+              "Gantt charts"
+            ]
+          },
+          {
+            "name": "Business",
+            "price": 12,
+            "period": "user/mo",
+            "highlights": [
+              "Google SSO",
+              "Unlimited dashboards",
+              "Workload management"
+            ]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "period": "user/mo",
+            "highlights": [
+              "White labeling",
+              "HIPAA",
+              "SSO",
+              "Custom roles"
+            ]
+          }
+        ]
+      },
+      "features": [
+        "Task Management",
+        "Docs",
+        "Whiteboards",
+        "Goals & OKRs",
+        "Time Tracking",
+        "Gantt Charts",
+        "Mind Maps",
+        "Sprints",
+        "Automations",
+        "Custom Fields",
+        "Dashboards",
+        "Email Integration",
+        "AI Assistant",
+        "Resource Management",
+        "Forms",
+        "Calendar Sync",
+        "Task Templates",
+        "Workflow Builder",
+        "Project Budgeting",
+        "Team Performance",
+        "Custom Notifications",
+        "Priority Flags",
+        "Dependency Mapping",
+        "Recurring Tasks",
+        "Task Delegation",
+        "Time Estimates",
+        "Workload Analysis",
+        "Project Timeline",
+        "Collaboration Tools",
+        "File Sharing",
+        "Integrations Hub",
+        "Custom Workflows",
+        "Automated Reporting",
+        "Task Reminders",
+        "Goal Tracking",
+        "Custom Permissions",
+        "User Profiles",
+        "Project Insights",
+        "Task Comments",
+        "Workflow Automation",
+        "Custom Dashboards",
+        "Data Export",
+        "Project Templates",
+        "Meeting Scheduling",
+        "Task Prioritization",
+        "Custom Integrations",
+        "Workflow Optimization"
+      ],
+      "rating": {
+        "g2": 4.7,
+        "capterra": 4.6
+      },
+      "founded": 2017,
+      "hq": "San Diego, CA",
+      "users": "10M+",
+      "affiliate": {
+        "url": "https://clickup.com/partners/affiliates",
+        "commission": "20% recurring",
+        "network": "PartnerStack"
+      },
+      "youtubeId": "zA0iatqvtYw",
+      "longDescription": "If you've ever wished you could replace your task manager, doc editor, spreadsheet, time tracker, and goal tracker with a single app - ClickUp attempts exactly that. It covers the full spectrum from simple personal to-do lists to complex enterprise workflows with dependencies, automations, and workload views. Agencies and operations teams particularly value its Custom Fields and multiple view options (list, board, gantt, calendar, table) - you can tailor the interface per team without splitting tools. The tradeoff is real: ClickUp is notoriously feature-heavy. New users regularly describe feeling overwhelmed during onboarding, and the mobile app lags behind the desktop experience. If your team only needs basic task management, the sheer number of settings can create more friction than it resolves. Where it shines is mid-sized teams running multiple departments that need one tool to track everything - not just tasks but also goals, workload capacity, and time logged against projects. Compared to Asana, ClickUp offers more granular customization at a lower price point. Compared to Notion, it's more structured and better suited for task ownership and deadline tracking.",
+      "featureCount": 47,
+      "normalizedFeatures": {
+        "Task Management": true,
+        "Kanban Boards": true,
+        "Gantt Charts": true,
+        "Time Tracking": true,
+        "Sprints/Scrum": true,
+        "Roadmaps": false,
+        "Automation": true,
+        "Reporting/Analytics": true,
+        "Custom Workflows": true,
+        "API/Integrations": true,
+        "Mobile App": false,
+        "Resource Management": true,
+        "Dependencies": true,
+        "Goals/OKRs": true,
+        "Forms": true,
+        "Guest Access": true,
+        "File Sharing": false,
+        "Comments/Mentions": true,
+        "Templates": true,
+        "Calendar View": true
+      },
+      "pros": [
+        "Free plan available",
+        "Affordable starting at $7/mo",
+        "Highly rated (4.7/5 on review platforms)",
+        "47 key features including Task Management and Docs",
+        "Large user base (10M+)"
+      ],
+      "cons": [
+        "Can feel overwhelming for simple projects",
+        "Some advanced features locked behind higher tiers"
+      ],
+      "youtubeReview": "https://www.youtube.com/watch?v=Fj-KjdAS3GI",
+      "useCases": [
+        {
+          "title": "Sprint Capacity Planning at a Glance",
+          "description": "ClickUp's Sprints view shows story point allocation per developer in real time, surfacing overallocation before a sprint begins rather than mid-cycle when it's too late to.",
+          "icon": "chart"
+        },
+        {
+          "title": "Compliance Audit Trail in Docs",
+          "description": "Approval decisions and reviewer sign-offs are threaded directly into ClickUp Docs as timestamped comments, creating an immutable audit record without external compliance tools or.",
+          "icon": "shield"
+        }
+      ],
+      "youtubeUploadDate": "2024-04-08T04:31:30Z",
+      "pricingAnalysis": {
+        "overview": "ClickUp - All-in-one productivity platform replacing multiple work tools. The free tier gets you Unlimited tasks, Unlimited members, 60MB storage - a real plan, not a 14-day trial. Upgrading to Unlimited ($7/user/mo) unlocks Unlimited storage and Unlimited integrations. At $7/mo, ClickUp undercuts the $11/mo category average by 36%. For comparison, Height starts at $8.5 and Miro at $8.",
+        "planAdvice": [
+          {
+            "plan": "Free",
+            "price": 0,
+            "period": "forever",
+            "advice": "You get Unlimited tasks, Unlimited members, 60MB storage. What's locked behind the paywall: unlimited storage, unlimited integrations, gantt charts. If those matter, Unlimited at $7/user/mo is the next step. Good enough for solo use and evaluation."
+          },
+          {
+            "plan": "Unlimited",
+            "price": 7,
+            "period": "user/mo",
+            "advice": "$7/user/mo gets you Unlimited storage, Unlimited integrations, Gantt charts. Team of 5 = $35/mo, team of 10 = $70/mo. The sweet spot for professionals who've maxed out the free plan and need Unlimited storage, Unlimited integrations."
+          },
+          {
+            "plan": "Business",
+            "price": 12,
+            "period": "user/mo",
+            "advice": "$12/user/mo gets you Google SSO, Unlimited dashboards, Workload management. Team of 5 = $60/mo, team of 10 = $120/mo. 71% more than Unlimited - justified only if you need the extras."
+          },
+          {
+            "plan": "Enterprise",
+            "price": null,
+            "period": "user/mo",
+            "advice": "Custom pricing for White labeling, HIPAA, SSO, Custom roles. Always negotiate - ask for pilot pricing if testing with <50 seats, and push for annual discount commitments. Compare enterprise quotes against Height's equivalent tier."
+          }
+        ],
+        "verdict": "ClickUp scores 4.7/5 and offers a free plan - that's a rare combination. The free tier with Unlimited tasks and Unlimited members is more than enough to validate whether it fits your workflow. Start free. Move to Unlimited ($7/user/mo) when Unlimited storage becomes a need, not a want."
+      },
+      "expertTake": "Goals & OKRs alongside Time Tracking in one tool is rare and genuinely useful for growing teams. Skip if you're small — 47 features sounds impressive until your team spends more time configuring than shipping.",
+      "bestFor": "Ops & Productivity Teams"
+    },
+    "Asana": {
+      "slug": "asana",
+      "name": "Asana",
+      "url": "https://asana.com",
+      "category": "project-management",
+      "subcategories": [
+        "tasks",
+        "portfolios",
+        "goals",
+        "workflows"
+      ],
+      "description": "Work management platform for teams to organize, track, and manage work",
+      "pricing": {
+        "free": true,
+        "plans": [
+          {
+            "name": "Personal",
+            "price": 0,
+            "period": "forever",
+            "highlights": [
+              "Up to 2 users",
+              "List, board & calendar views",
+              "Unlimited tasks"
+            ]
+          },
+          {
+            "name": "Starter",
+            "price": 10.99,
+            "period": "user/mo",
+            "highlights": [
+              "Timeline & Gantt views",
+              "Workflow builder",
+              "Unlimited users"
+            ]
+          },
+          {
+            "name": "Advanced",
+            "price": 24.99,
+            "period": "user/mo",
+            "highlights": [
+              "Goals",
+              "Portfolios",
+              "Proofing",
+              "Native time tracking"
+            ]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "period": "user/mo",
+            "highlights": [
+              "SAML",
+              "SCIM",
+              "Data export",
+              "Custom branding"
+            ]
+          }
+        ]
+      },
+      "features": [
+        "Task Management",
+        "Timeline View",
+        "Board View",
+        "Calendar View",
+        "Goals & Portfolios",
+        "Workflow Automation",
+        "Forms",
+        "Reporting",
+        "Custom Fields",
+        "Proofing",
+        "Time Tracking",
+        "AI Features",
+        "100+ Integrations",
+        "Mobile Apps",
+        "Status Updates",
+        "Customizable Dashboard Widgets",
+        "Task Dependencies",
+        "Prioritization Tools",
+        "Automated Reminders",
+        "Multi Level Workspaces",
+        "Advanced Search Filters",
+        "Customizable Notifications",
+        "In App Messaging",
+        "Task Template Library",
+        "Gantt Chart View",
+        "Resource Allocation",
+        "Budgeting Tools",
+        "Customizable Permissions",
+        "Automated Task Assignment",
+        "Custom Integration APIs",
+        "Single Sign On Support"
+      ],
+      "rating": {
+        "g2": 4.4,
+        "capterra": 4.5
+      },
+      "founded": 2008,
+      "hq": "San Francisco, CA",
+      "users": "200K+ organizations",
+      "affiliate": {
+        "url": "https://asana.com/partners",
+        "commission": "Not public",
+        "network": "Direct"
+      },
+      "youtubeId": "wxSRHrx4qho",
+      "longDescription": "Teams that need clear ownership and deadline accountability tend to gravitate toward Asana. Its strength lies in task management with a strong emphasis on assignees, due dates, and project timelines - making it easier than many alternatives to answer 'who is doing what by when.' The Timeline view (Gantt-style) and workload features are particularly useful for project managers who need to spot bottlenecks before they happen. Asana integrates well with Slack, Google Workspace, Salesforce, and Zoom, making it a natural fit for teams already embedded in those ecosystems. What it doesn't do as well: managing documents or knowledge alongside tasks (you'll still need Confluence or Notion for that), and its pricing jumps significantly when you need advanced features like portfolios or time tracking. The free plan is limited to 15 members with no timeline view, which rules it out for growing teams on a budget. Best used by marketing teams managing campaigns, product teams tracking feature releases, and operations teams running recurring processes. It's less ideal for software engineering teams who want native git integrations and agile-specific tooling - Jira or Linear serve that use case better.",
+      "featureCount": 31,
+      "normalizedFeatures": {
+        "Task Management": true,
+        "Kanban Boards": true,
+        "Gantt Charts": true,
+        "Time Tracking": true,
+        "Sprints/Scrum": false,
+        "Roadmaps": false,
+        "Automation": true,
+        "Reporting/Analytics": true,
+        "Custom Workflows": true,
+        "API/Integrations": true,
+        "Mobile App": true,
+        "Resource Management": true,
+        "Dependencies": false,
+        "Goals/OKRs": true,
+        "Forms": true,
+        "Guest Access": true,
+        "File Sharing": false,
+        "Comments/Mentions": false,
+        "Templates": true,
+        "Calendar View": true
+      },
+      "pros": [
+        "Free plan available",
+        "Affordable starting at $10.99/mo",
+        "Highly rated (4.4/5 on G2)",
+        "31 key features including Task Management and Timeline View",
+        "Multiple pricing tiers (4 plans) to match different needs"
+      ],
+      "cons": [
+        "Can feel overwhelming for simple projects",
+        "Some advanced features locked behind higher tiers"
+      ],
+      "youtubeReview": "https://www.youtube.com/watch?v=82tsktatlgE",
+      "useCases": [
+        {
+          "title": "Design-to-Dev Handoff via Forms",
+          "description": "Asana Forms route completed assets to the right developers automatically, while Workflow Automation rules trigger reassignments when design reviews stall past 48 hours.",
+          "icon": "zap"
+        },
+        {
+          "title": "Map OKRs Directly to Sprint Tasks",
+          "description": "Goals & Portfolios link quarterly objectives to sprint tasks, so story completions automatically surface as OKR progress visible to engineering leads without separate status.",
+          "icon": "rocket"
+        },
+        {
+          "title": "Event Production With Vendor Gates",
+          "description": "Timeline View links vendor task chains as dependencies, and Forms collect confirmations at each gate with automated reminders firing at 14, 7, and 2 days before critical deadlines.",
+          "icon": "clock"
+        }
+      ],
+      "youtubeUploadDate": "2025-04-01T13:27:49Z",
+      "pricingAnalysis": {
+        "overview": "Asana - Work management platform for teams to organize, track, and manage work. The free tier gets you Up to 2 users, List, board & calendar views, Unlimited tasks - a real plan, not a 14-day trial. Upgrading to Starter ($10.99/user/mo) unlocks Timeline & Gantt views and Workflow builder. Priced near the $11/mo category average, Asana competes directly with Height and Miro on value.",
+        "planAdvice": [
+          {
+            "plan": "Personal",
+            "price": 0,
+            "period": "forever",
+            "advice": "You get Up to 2 users, List, board & calendar views, Unlimited tasks. What's locked behind the paywall: timeline & gantt views, workflow builder, unlimited users. If those matter, Starter at $10.99/user/mo is the next step. Good enough for solo use and evaluation."
+          },
+          {
+            "plan": "Starter",
+            "price": 10.99,
+            "period": "user/mo",
+            "advice": "$10.99/user/mo gets you Timeline & Gantt views, Workflow builder, Unlimited users. Team of 5 = $54.95/mo, team of 10 = $109.9/mo. The sweet spot for professionals who've maxed out the free plan and need Timeline & Gantt views, Workflow builder."
+          },
+          {
+            "plan": "Advanced",
+            "price": 24.99,
+            "period": "user/mo",
+            "advice": "$24.99/user/mo gets you Goals, Portfolios, Proofing, Native time tracking. Team of 5 = $124.94999999999999/mo, team of 10 = $249.89999999999998/mo. 127% more than Starter - justified only if you need the extras. At this price point, also evaluate Height."
+          },
+          {
+            "plan": "Enterprise",
+            "price": null,
+            "period": "user/mo",
+            "advice": "Custom pricing for SAML, SCIM, Data export, Custom branding. Always negotiate - ask for pilot pricing if testing with <50 seats, and push for annual discount commitments. Compare enterprise quotes against Height's equivalent tier."
+          }
+        ],
+        "verdict": "Asana scores 4.5/5 and offers a free plan - that's a rare combination. The free tier with Up to 2 users and List, board & calendar views is more than enough to validate whether it fits your workflow. Start free. Move to Starter ($10.99/user/mo) when Timeline & Gantt views becomes a need, not a want."
+      },
+      "expertTake": "The Timeline View + Goals & Portfolios combo is built for managers juggling multiple teams, not solo users. Worth it for mid-size orgs; the price-to-value ratio only kicks in when you have real headcount behind it.",
+      "bestFor": "Marketing & Operations Teams"
+    },
+    "monday.com": {
+      "slug": "monday",
+      "name": "monday.com",
+      "url": "https://monday.com",
+      "category": "project-management",
+      "subcategories": [
+        "work-management",
+        "crm",
+        "dev",
+        "service"
+      ],
+      "description": "Work OS that powers teams to run projects and workflows with confidence",
+      "pricing": {
+        "free": true,
+        "plans": [
+          {
+            "name": "Free",
+            "price": 0,
+            "period": "forever",
+            "highlights": [
+              "Up to 2 seats",
+              "3 boards",
+              "200+ templates"
+            ]
+          },
+          {
+            "name": "Basic",
+            "price": 9,
+            "period": "seat/mo",
+            "highlights": [
+              "Unlimited viewers",
+              "Unlimited items",
+              "5GB storage"
+            ]
+          },
+          {
+            "name": "Standard",
+            "price": 12,
+            "period": "seat/mo",
+            "highlights": [
+              "Timeline & Gantt",
+              "Calendar view",
+              "Guest access"
+            ]
+          },
+          {
+            "name": "Pro",
+            "price": 19,
+            "period": "seat/mo",
+            "highlights": [
+              "Private boards",
+              "Time tracking",
+              "Chart view"
+            ]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "period": "seat/mo",
+            "highlights": [
+              "Advanced security",
+              "Multi-level permissions",
+              "Enterprise analytics"
+            ]
+          }
+        ]
+      },
+      "features": [
+        "Kanban Boards",
+        "Timeline",
+        "Gantt Charts",
+        "Calendar",
+        "Dashboards",
+        "Automations",
+        "Integrations",
+        "Forms",
+        "Custom Workflows",
+        "Time Tracking",
+        "File Management",
+        "AI Assistant",
+        "Docs",
+        "Mobile Apps",
+        "Guest Access",
+        "Conditional Logic Rules",
+        "Custom Notification System",
+        "Task Dependency Mapping",
+        "Prioritization Framework",
+        "Budgeting and Cost Tracking",
+        "Resource Allocation Tool",
+        "Meeting Scheduling Integration",
+        "Customizable Reporting",
+        "Automated Task Assignment",
+        "Real Time Collaboration",
+        "Project Template Library",
+        "Custom Field Creator",
+        "Workflow Analytics",
+        "User Permission Controls",
+        "Data Export Options",
+        "Customizable Color Schemes",
+        "Board View Filters",
+        "Item Linking System",
+        "Custom Chart Builder",
+        "Automated Backup System",
+        "Customizable Alerts",
+        "Dependency Warning System",
+        "Item Tagging System",
+        "Custom View Builder",
+        "Customizable Navigation",
+        "Automated Task Due Date",
+        "Customizable Item Cards",
+        "Custom Formula Builder",
+        "Customizable Search Function",
+        "Customizable User Profiles"
+      ],
+      "rating": {
+        "g2": 4.7,
+        "capterra": 4.6
+      },
+      "founded": 2012,
+      "hq": "Tel Aviv, Israel",
+      "users": "225K+ customers",
+      "affiliate": {
+        "url": "https://monday.com/partnership/affiliate",
+        "commission": "Up to $150/sale",
+        "network": "Impact"
+      },
+      "youtubeId": "T3qH-uY3t-Y",
+      "longDescription": "Originally designed as a flexible spreadsheet alternative, monday.com has evolved into a work management platform used across project management, CRM, marketing ops, and HR workflows. Its visual, color-coded board interface makes status tracking immediately legible - even stakeholders who don't live in the tool can glance at a board and understand project health. This accessibility is a core differentiator: it requires minimal training to get a team up and running. monday.com's automation builder is genuinely useful for recurring tasks - things like automatically notifying someone when a status changes or moving items between boards when conditions are met. The pricing model is a common frustration: features like time tracking, automations, and dashboards are gated behind higher-tier plans, and billing is per seat with a 3-seat minimum. For small teams or individuals, that makes it expensive relative to alternatives like ClickUp or Trello. Enterprise teams running across multiple departments will find the cross-board dashboards and permission controls valuable. Not recommended as a primary tool for software development workflows - it lacks native sprint planning and code integration that engineering teams need.",
+      "featureCount": 45,
+      "normalizedFeatures": {
+        "Task Management": true,
+        "Kanban Boards": true,
+        "Gantt Charts": false,
+        "Time Tracking": true,
+        "Sprints/Scrum": true,
+        "Roadmaps": true,
+        "Automation": true,
+        "Reporting/Analytics": true,
+        "Custom Workflows": true,
+        "API/Integrations": true,
+        "Mobile App": false,
+        "Resource Management": true,
+        "Dependencies": false,
+        "Goals/OKRs": false,
+        "Forms": true,
+        "Guest Access": false,
+        "File Sharing": true,
+        "Comments/Mentions": true,
+        "Templates": true,
+        "Calendar View": true
+      },
+      "pros": [
+        "Free plan available",
+        "Affordable starting at $9/mo",
+        "Highly rated (4.7/5 on review platforms)",
+        "45 key features including Kanban Boards and Timeline",
+        "Multiple pricing tiers (5 plans) to match different needs"
+      ],
+      "cons": [
+        "Can feel overwhelming for simple projects",
+        "Some advanced features locked behind higher tiers"
+      ],
+      "youtubeReview": "https://www.youtube.com/watch?v=QyAWJfX9NsU",
+      "useCases": [
+        {
+          "title": "Async Standups Across 6 Time Zones",
+          "description": "Each contributor logs blockers, wins, and next steps into Calendar View as dated entries, giving the whole org a scrollable timeline without overlapping sync meetings.",
+          "icon": "calendar"
+        },
+        {
+          "title": "Resource Allocation Across 12 Projects",
+          "description": "Custom Dashboards surface committed hours per person across all active projects, flagging over-allocations so PMs rebalance workload before bottlenecks form.",
+          "icon": "chart"
+        },
+        {
+          "title": "Intake Request Routing With Forms",
+          "description": "Stakeholder requests submitted via Forms auto-populate a Kanban board, moving through Submitted → Scoped → Approved lanes without any manual data entry or follow-up emails.",
+          "icon": "mail"
+        },
+        {
+          "title": "Gantt Dependencies That Auto-Adjust",
+          "description": "Gantt Charts link deployment phases so a testing delay automatically shifts the production date and alerts downstream teams, preventing missed launch windows.",
+          "icon": "rocket"
+        }
+      ],
+      "youtubeUploadDate": "2020-06-15T13:20:50Z",
+      "pricingAnalysis": {
+        "overview": "monday.com - Work OS that powers teams to run projects and workflows with confidence. The free tier gets you Up to 2 seats, 3 boards, 200+ templates - a real plan, not a 14-day trial. Upgrading to Basic ($9/seat/mo) unlocks Unlimited viewers and Unlimited items. Priced near the $11/mo category average, monday.com competes directly with Height and Miro on value.",
+        "planAdvice": [
+          {
+            "plan": "Free",
+            "price": 0,
+            "period": "forever",
+            "advice": "You get Up to 2 seats, 3 boards, 200+ templates. What's locked behind the paywall: unlimited viewers, unlimited items, 5gb storage. If those matter, Basic at $9/seat/mo is the next step. Good enough for solo use and evaluation."
+          },
+          {
+            "plan": "Basic",
+            "price": 9,
+            "period": "seat/mo",
+            "advice": "$9/seat/mo gets you Unlimited viewers, Unlimited items, 5GB storage. Team of 5 = $45/mo, team of 10 = $90/mo. The sweet spot for professionals who've maxed out the free plan and need Unlimited viewers, Unlimited items."
+          },
+          {
+            "plan": "Standard",
+            "price": 12,
+            "period": "seat/mo",
+            "advice": "$12/seat/mo gets you Timeline & Gantt, Calendar view, Guest access. Team of 5 = $60/mo, team of 10 = $120/mo. The middle ground - enough for growing teams without enterprise overhead. Saves $7/seat/mo vs. Pro."
+          },
+          {
+            "plan": "Pro",
+            "price": 19,
+            "period": "seat/mo",
+            "advice": "$19/seat/mo gets you Private boards, Time tracking, Chart view. Team of 5 = $95/mo, team of 10 = $190/mo. 58% more than Standard - justified only if you need the extras. At this price point, also evaluate Height."
+          },
+          {
+            "plan": "Enterprise",
+            "price": null,
+            "period": "seat/mo",
+            "advice": "Custom pricing for Advanced security, Multi-level permissions, Enterprise analytics. Always negotiate - ask for pilot pricing if testing with <50 seats, and push for annual discount commitments. Compare enterprise quotes against Height's equivalent tier."
+          }
+        ],
+        "verdict": "monday.com scores 4.7/5 and offers a free plan - that's a rare combination. The free tier with Up to 2 seats and 3 boards is more than enough to validate whether it fits your workflow. Start free. Move to Basic ($9/seat/mo) when Unlimited viewers becomes a need, not a want."
+      },
+      "expertTake": "The Dashboards pulling live data across projects are the real sell — genuinely useful for ops leads tracking multiple streams. Skip if you just need simple task lists; that flexibility comes at a meaningful setup cost.",
+      "bestFor": "Mid-Size Business Teams",
+      "youtubeStats": {
+        "views": 1035536,
+        "likes": 4118,
+        "fetchedAt": "2026-04-26T13:54:21.813Z"
+      },
+      "lastUpdated": "2026-04-26"
+    },
+    "Jira": {
+      "slug": "jira",
+      "name": "Jira",
+      "url": "https://www.atlassian.com/software/jira",
+      "category": "project-management",
+      "subcategories": [
+        "agile",
+        "scrum",
+        "bug-tracking",
+        "software-development"
+      ],
+      "description": "The #1 agile project management tool for software development teams",
+      "pricing": {
+        "free": true,
+        "plans": [
+          {
+            "name": "Free",
+            "price": 0,
+            "period": "forever",
+            "highlights": [
+              "Up to 10 users",
+              "Unlimited projects",
+              "2GB storage"
+            ]
+          },
+          {
+            "name": "Standard",
+            "price": 7.91,
+            "period": "user/mo",
+            "highlights": [
+              "Up to 100K users",
+              "250GB storage",
+              "AI features"
+            ]
+          },
+          {
+            "name": "Premium",
+            "price": 14.54,
+            "period": "user/mo",
+            "highlights": [
+              "Cross-team planning",
+              "Unlimited storage",
+              "99.9% SLA"
+            ]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "period": "user/mo",
+            "highlights": [
+              "Up to 150 sites",
+              "Advanced analytics",
+              "99.95% SLA"
+            ]
+          }
+        ]
+      },
+      "features": [
+        "Scrum Boards",
+        "Kanban Boards",
+        "Sprints",
+        "Backlog Management",
+        "Roadmaps",
+        "Custom Workflows",
+        "Automation",
+        "Reporting",
+        "Dashboards",
+        "Time Tracking",
+        "API & Integrations",
+        "AI Features (Rovo)",
+        "Mobile Apps",
+        "Forms",
+        "Advanced Search (JQL)",
+        "Issue Assignment",
+        "Project Templates",
+        "Workflow Validators",
+        "Conditional Fields",
+        "Custom Fields",
+        "Screen Configurations",
+        "Issue Linking",
+        "Subtask Management",
+        "Component Management",
+        "Version Management",
+        "Release Management",
+        "Deployment Tracking",
+        "Test Management",
+        "Requirement Management",
+        "Epic Tracking",
+        "Story Mapping",
+        "Velocity Charting",
+        "Burndown Charting",
+        "Burnup Charting",
+        "Control Charts",
+        "Cumulative Flow",
+        "Cycle Time",
+        "Lead Time",
+        "Issue Hierarchy",
+        "Project Hierarchy",
+        "User Profiles",
+        "Group Management"
+      ],
+      "rating": {
+        "g2": 4.3,
+        "capterra": 4.5
+      },
+      "founded": 2002,
+      "hq": "Sydney, Australia (Atlassian)",
+      "users": "65K+ customers",
+      "affiliate": {
+        "url": "https://www.atlassian.com/partners",
+        "commission": "Not public",
+        "network": "Atlassian Partners"
+      },
+      "youtubeId": "fiWaMGCMyk8",
+      "longDescription": "The standard for software development teams, Jira is built around agile methodologies - sprints, story points, epics, and backlogs - in a way that few other tools match in depth. Engineering teams use it to plan sprints, track bugs, manage releases, and report velocity over time. Its deep integration with Bitbucket, Confluence, and the broader Atlassian ecosystem creates a tight feedback loop between code, documentation, and project status. Jira's reporting suite - burndown charts, velocity reports, sprint health - gives engineering managers visibility that generic project tools can't replicate. The tradeoffs are well-documented: Jira is complex. Initial setup and configuration require dedicated time, and non-technical stakeholders often find the interface confusing compared to visual tools like monday.com or Asana. For teams not doing software development, Jira is almost always overkill. For engineering teams shipping software, especially those practicing Scrum or Kanban, it remains the most capable option in the market.",
+      "featureCount": 42,
+      "normalizedFeatures": {
+        "Task Management": true,
+        "Kanban Boards": true,
+        "Gantt Charts": false,
+        "Time Tracking": false,
+        "Sprints/Scrum": true,
+        "Roadmaps": false,
+        "Automation": true,
+        "Reporting/Analytics": true,
+        "Custom Workflows": true,
+        "API/Integrations": true,
+        "Mobile App": false,
+        "Resource Management": false,
+        "Dependencies": true,
+        "Goals/OKRs": true,
+        "Forms": true,
+        "Guest Access": false,
+        "File Sharing": false,
+        "Comments/Mentions": false,
+        "Templates": true,
+        "Calendar View": true
+      },
+      "pros": [
+        "Free plan available",
+        "Affordable starting at $7.91/mo",
+        "Strong user ratings (4.3/5 on G2)",
+        "42 key features including Scrum Boards and Kanban Boards",
+        "Multiple pricing tiers (4 plans) to match different needs"
+      ],
+      "cons": [
+        "Can feel overwhelming for simple projects",
+        "Some advanced features locked behind higher tiers"
+      ],
+      "youtubeReview": "https://www.youtube.com/watch?v=f86oyhVKI0Q",
+      "useCases": [
+        {
+          "title": "Auto-Route Reviews With Custom Workflows",
+          "description": "Jira Custom Workflows sequence code reviews, QA gates, and deploy approvals - blocking each stage until complete so the bottleneck owner is always visible to the whole team.",
+          "icon": "code"
+        },
+        {
+          "title": "Multi-Sprint Backlog Capacity View",
+          "description": "Backlog Management shows story points across 4–6 sprints, helping leads spot overallocated contributors and trim scope before sprint commitments are finalized.",
+          "icon": "chart"
+        }
+      ],
+      "youtubeUploadDate": "2024-03-18T11:30:31Z",
+      "pricingAnalysis": {
+        "overview": "Jira - The #1 agile project management tool for software development teams. The free tier gets you Up to 10 users, Unlimited projects, 2GB storage - a real plan, not a 14-day trial. Upgrading to Standard ($7.91/user/mo) unlocks Up to 100K users and 250GB storage. At $7.91/mo, Jira undercuts the $11/mo category average by 28%. For comparison, Height starts at $8.5 and Miro at $8.",
+        "planAdvice": [
+          {
+            "plan": "Free",
+            "price": 0,
+            "period": "forever",
+            "advice": "You get Up to 10 users, Unlimited projects, 2GB storage. What's locked behind the paywall: up to 100k users, 250gb storage, ai features. If those matter, Standard at $7.91/user/mo is the next step. Good enough for solo use and evaluation."
+          },
+          {
+            "plan": "Standard",
+            "price": 7.91,
+            "period": "user/mo",
+            "advice": "$7.91/user/mo gets you Up to 100K users, 250GB storage, AI features. Team of 5 = $39.55/mo, team of 10 = $79.1/mo. The sweet spot for professionals who've maxed out the free plan and need Up to 100K users, 250GB storage."
+          },
+          {
+            "plan": "Premium",
+            "price": 14.54,
+            "period": "user/mo",
+            "advice": "$14.54/user/mo gets you Cross-team planning, Unlimited storage, 99.9% SLA. Team of 5 = $72.69999999999999/mo, team of 10 = $145.39999999999998/mo. 84% more than Standard - justified only if you need the extras."
+          },
+          {
+            "plan": "Enterprise",
+            "price": null,
+            "period": "user/mo",
+            "advice": "Custom pricing for Up to 150 sites, Advanced analytics, 99.95% SLA. Always negotiate - ask for pilot pricing if testing with <50 seats, and push for annual discount commitments. Compare enterprise quotes against Height's equivalent tier."
+          }
+        ],
+        "verdict": "Rated 4.4/5, Jira at $7.91/mo is a value pick in its category. Start free. Move to Standard ($7.91/user/mo) when Up to 100K users becomes a need, not a want."
+      },
+      "expertTake": "Backlog Management + Sprints are the gold standard for dev teams — nothing else maps as cleanly to how engineers actually ship. Skip if you're not running agile; the setup overhead will crush a non-technical team.",
+      "bestFor": "Software Development Teams",
+      "youtubeStats": {
+        "views": 170827,
+        "likes": 1718,
+        "fetchedAt": "2026-04-26T13:54:21.813Z"
+      },
+      "lastUpdated": "2026-04-26"
+    },
+    "Linear": {
+      "slug": "linear",
+      "name": "Linear",
+      "url": "https://linear.app",
+      "category": "project-management",
+      "subcategories": [
+        "issue-tracking",
+        "software-development",
+        "agile"
+      ],
+      "description": "Streamlined issue tracking and project management for software teams",
+      "pricing": {
+        "free": true,
+        "plans": [
+          {
+            "name": "Free",
+            "price": 0,
+            "period": "forever",
+            "highlights": [
+              "Unlimited members",
+              "250 issues",
+              "2 teams"
+            ]
+          },
+          {
+            "name": "Basic",
+            "price": 10,
+            "period": "user/mo",
+            "highlights": [
+              "5 teams",
+              "Unlimited issues",
+              "Admin roles"
+            ]
+          },
+          {
+            "name": "Business",
+            "price": 16,
+            "period": "user/mo",
+            "highlights": [
+              "Unlimited teams",
+              "Private teams",
+              "SLAs",
+              "Insights"
+            ]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "period": "user/mo",
+            "highlights": [
+              "SAML/SCIM",
+              "Advanced security",
+              "Dedicated support"
+            ]
+          }
+        ]
+      },
+      "features": [
+        "Issues & Sub-issues",
+        "Projects & Cycles",
+        "Roadmaps",
+        "Triage",
+        "Git Integration",
+        "Slack Integration",
+        "API & Webhooks",
+        "Custom Workflows",
+        "Keyboard Shortcuts",
+        "AI Agents",
+        "Insights & Analytics",
+        "Customer Requests",
+        "Mobile App",
+        "Offline Mode",
+        "Real-time Sync",
+        "Dependency Mapping",
+        "Automated Task Routing",
+        "Time Estimation Tools",
+        "Customizable Board Views",
+        "Integrated Video Meetings",
+        "Workflow Automation Rules",
+        "Priority Flagging System"
+      ],
+      "rating": {
+        "g2": 4.6,
+        "capterra": 4.7
+      },
+      "founded": 2019,
+      "hq": "San Francisco, CA",
+      "users": "10K+ companies",
+      "affiliate": {
+        "url": null,
+        "commission": "N/A",
+        "network": "N/A"
+      },
+      "youtubeId": "9Q5BoiIFBiY",
+      "longDescription": "Linear was built in reaction to the bloat that accumulates in tools like Jira. It's fast - deliberately, obsessively fast - with a keyboard-first interface that product and engineering teams who spend hours in the tool genuinely appreciate. Issue creation, assignment, priority updates, and sprint management happen through keyboard shortcuts in a way other tools don't match. Its opinionated design means it doesn't try to be everything: no custom fields for arbitrary data, no complex automations, no expense tracking. What you get is a clean, well-structured system for tracking issues, managing cycles (sprints), and organizing work by teams and projects. Linear's Git integration is tight - linking commits, pull requests, and branches to issues with minimal configuration. This is where it outperforms Jira for modern engineering teams. Not designed for non-technical teams or general project management. For software teams of 5-200 engineers who value speed and clean UX over configurability, it's one of the strongest options available.",
+      "featureCount": 22,
+      "normalizedFeatures": {
+        "Task Management": true,
+        "Kanban Boards": true,
+        "Gantt Charts": false,
+        "Time Tracking": false,
+        "Sprints/Scrum": false,
+        "Roadmaps": true,
+        "Automation": true,
+        "Reporting/Analytics": true,
+        "Custom Workflows": true,
+        "API/Integrations": true,
+        "Mobile App": true,
+        "Resource Management": false,
+        "Dependencies": false,
+        "Goals/OKRs": false,
+        "Forms": false,
+        "Guest Access": false,
+        "File Sharing": false,
+        "Comments/Mentions": false,
+        "Templates": false,
+        "Calendar View": false
+      },
+      "pros": [
+        "Free plan available",
+        "Affordable starting at $10/mo",
+        "Highly rated (4.6/5 on G2)",
+        "22 key features including Issues & Sub-issues and Projects & Cycles",
+        "Multiple pricing tiers (4 plans) to match different needs"
+      ],
+      "cons": [
+        "Can feel overwhelming for simple projects",
+        "Some advanced features locked behind higher tiers"
+      ],
+      "youtubeReview": "https://www.youtube.com/watch?v=fqGPRMN0MKw",
+      "useCases": [
+        {
+          "title": "Git-Linked Issues Speed Deploys",
+          "description": "Branches referencing an Issue ID automatically update status and link the pull request in Linear, giving QA real-time visibility into which commits close which tickets.",
+          "icon": "code"
+        },
+        {
+          "title": "Multi-Team Capacity in Cycles",
+          "description": "Cycles cap story points per squad, surfacing overallocation visually when work bleeds across sprint boundaries so engineering leads can rebalance before kick-off.",
+          "icon": "team"
+        },
+        {
+          "title": "P0 Bug Routing via Triage & Workflows",
+          "description": "Triage handles bulk severity labeling and routing for inbound bugs; Custom Workflows escalate P0s to team chat and slot them into the active Cycle within 30 seconds of creation.",
+          "icon": "zap"
+        }
+      ],
+      "youtubeUploadDate": "2025-06-09T15:29:05Z",
+      "pricingAnalysis": {
+        "overview": "Linear - Streamlined issue tracking and project management for software teams. The free tier gets you Unlimited members, 250 issues, 2 teams - a real plan, not a 14-day trial. Upgrading to Basic ($10/user/mo) unlocks 5 teams and Unlimited issues. Priced near the $11/mo category average, Linear competes directly with Height and Miro on value.",
+        "planAdvice": [
+          {
+            "plan": "Free",
+            "price": 0,
+            "period": "forever",
+            "advice": "You get Unlimited members, 250 issues, 2 teams. What's locked behind the paywall: 5 teams, unlimited issues, admin roles. If those matter, Basic at $10/user/mo is the next step. Good enough for solo use and evaluation."
+          },
+          {
+            "plan": "Basic",
+            "price": 10,
+            "period": "user/mo",
+            "advice": "$10/user/mo gets you 5 teams, Unlimited issues, Admin roles. Team of 5 = $50/mo, team of 10 = $100/mo. The sweet spot for professionals who've maxed out the free plan and need 5 teams, Unlimited issues."
+          },
+          {
+            "plan": "Business",
+            "price": 16,
+            "period": "user/mo",
+            "advice": "$16/user/mo gets you Unlimited teams, Private teams, SLAs, Insights. Team of 5 = $80/mo, team of 10 = $160/mo. 60% more than Basic - justified only if you need the extras."
+          },
+          {
+            "plan": "Enterprise",
+            "price": null,
+            "period": "user/mo",
+            "advice": "Custom pricing for SAML/SCIM, Advanced security, Dedicated support. Always negotiate - ask for pilot pricing if testing with <50 seats, and push for annual discount commitments. Compare enterprise quotes against Height's equivalent tier."
+          }
+        ],
+        "verdict": "Linear scores 4.7/5 and offers a free plan - that's a rare combination. The free tier with Unlimited members and 250 issues is more than enough to validate whether it fits your workflow. Start free. Move to Basic ($10/user/mo) when 5 teams becomes a need, not a want."
+      },
+      "expertTake": "Git Integration + Triage make this the fastest issue tracker in production — the feedback loop between code and tasks is tight. Skip if your project involves non-engineers who'll be confused by Cycles and the sprint-style workflow.",
+      "bestFor": "Product & Engineering Teams"
+    },
+    "Coda": {
+      "slug": "coda",
+      "name": "Coda",
+      "url": "https://coda.io",
+      "category": "project-management",
+      "subcategories": [
+        "docs",
+        "databases",
+        "automation",
+        "no-code"
+      ],
+      "description": "All-in-one doc that combines documents, spreadsheets, and apps",
+      "pricing": {
+        "free": true,
+        "plans": [
+          {
+            "name": "Free",
+            "price": 0,
+            "period": "mo",
+            "highlights": [
+              "Unlimited editors",
+              "Unlimited docs",
+              "Basic features"
+            ]
+          },
+          {
+            "name": "Pro",
+            "price": 10,
+            "period": "Doc Maker/mo",
+            "highlights": [
+              "Unlimited pages",
+              "Custom domains",
+              "Hidden pages"
+            ]
+          },
+          {
+            "name": "Team",
+            "price": 30,
+            "period": "Doc Maker/mo",
+            "highlights": [
+              "Shared permissions",
+              "Private docs",
+              "Advanced automations"
+            ]
+          },
+          {
+            "name": "Enterprise",
+            "price": null,
+            "period": "custom",
+            "highlights": [
+              "SSO",
+              "Audit logs",
+              "Advanced security"
+            ]
+          }
+        ]
+      },
+      "features": [
+        "Documents",
+        "Tables",
+        "Formulas",
+        "Automations",
+        "Packs (Integrations)",
+        "Cross-doc",
+        "Templates",
+        "Views",
+        "Buttons",
+        "AI Features",
+        "Charts",
+        "Publishing",
+        "Mobile Apps",
+        "API",
+        "Custom Branding",
+        "Conditional Formatting",
+        "Task Assignments",
+        "Gantt Charts",
+        "Custom Permissions",
+        "Version History",
+        "Collaboration Tools",
+        "Data Validation",
+        "Formula Debugger",
+        "Webhooks Support"
+      ],
+      "rating": {
+        "g2": 4.7,
+        "capterra": 4.6
+      },
+      "founded": 2014,
+      "hq": "Mountain View, CA",
+      "users": "50K+ teams",
+      "affiliate": {
+        "url": null,
+        "commission": "N/A",
+        "network": "N/A"
+      },
+      "youtubeId": "KzSt2bR7LVc",
+      "longDescription": "Coda sits in a specific niche: teams who want the structure of a database, the flexibility of a doc, and the automation of a workflow tool - without stitching three products together. A Coda doc can contain text, tables, formulas, buttons that trigger actions, and integrations with Salesforce, Jira, or Slack - all in one document. This makes it particularly powerful for operations and product teams building internal dashboards, meeting notes that auto-populate project data, or intake forms that update a shared tracker. The formula engine is more like a programming language than a spreadsheet - powerful but with a steeper learning curve than most team tools. New users coming from Google Docs or Notion may spend significant time learning Coda's unique concepts. Best for operations managers and product teams who need a flexible doc-meets-database format to build custom internal tools, and who have at least one team member willing to invest time in learning the formula system.",
+      "featureCount": 24,
+      "normalizedFeatures": {
+        "Task Management": true,
+        "Kanban Boards": false,
+        "Gantt Charts": false,
+        "Time Tracking": false,
+        "Sprints/Scrum": false,
+        "Roadmaps": true,
+        "Automation": true,
+        "Reporting/Analytics": true,
+        "Custom Workflows": true,
+        "API/Integrations": true,
+        "Mobile App": true,
+        "Resource Management": false,
+        "Dependencies": false,
+        "Goals/OKRs": true,
+        "Forms": true,
+        "Guest Access": true,
+        "File Sharing": true,
+        "Comments/Mentions": true,
+        "Templates": true,
+        "Calendar View": true
+      },
+      "pros": [
+        "Free plan available",
+        "Affordable starting at $12/mo",
+        "Highly rated (4.7/5 on review platforms)",
+        "24 key features including Documents and Tables",
+        "Multiple pricing tiers (4 plans) to match different needs"
+      ],
+      "cons": [
+        "Can feel overwhelming for simple projects",
+        "Some advanced features locked behind higher tiers"
+      ],
+      "youtubeReview": "https://www.youtube.com/watch?v=6XyR30OgMvg",
+      "useCases": [
+        {
+          "title": "Live Resource Capacity in Coda Tables",
+          "description": "Allocation formulas flag over-capacity contributors automatically; cross-doc references feed live data into each squad's planning doc, keeping every pod in sync without manual.",
+          "icon": "database"
+        },
+        {
+          "title": "Async Standups in Embedded Status Tables",
+          "description": "An embedded Table collects blockers and priorities per contributor in structured rows; Automations fire when entries are overdue, keeping async standups on schedule across time.",
+          "icon": "clock"
+        },
+        {
+          "title": "Client Delivery Milestone Dashboard",
+          "description": "A Tables and multi-View Coda doc tracks every deliverable's status across Kanban and calendar layouts; Packs push daily team chat summaries so clients skip chasing progress via email.",
+          "icon": "chart"
+        }
+      ],
+      "youtubeUploadDate": "2023-05-03T18:15:55Z",
+      "pricingAnalysis": {
+        "overview": "Coda - All-in-one doc that combines documents, spreadsheets, and apps. The free tier gets you Unlimited editors, Unlimited docs, Basic features - a real plan, not a 14-day trial. Upgrading to Pro ($10/Doc Maker/mo) unlocks Unlimited pages and Custom domains. Priced near the $11/mo category average, Coda competes directly with Height and Miro on value. The gap between Pro ($10) and Team ($30) is significant - the 3x multiplier only makes sense if you need Shared permissions.",
+        "planAdvice": [
+          {
+            "plan": "Free",
+            "price": 0,
+            "period": "mo",
+            "advice": "You get Unlimited editors, Unlimited docs, Basic features. What's locked behind the paywall: unlimited pages, custom domains, hidden pages. If those matter, Pro at $10/Doc Maker/mo is the next step. Good enough for solo use and evaluation."
+          },
+          {
+            "plan": "Pro",
+            "price": 10,
+            "period": "Doc Maker/mo",
+            "advice": "$10/Doc Maker/mo gets you Unlimited pages, Custom domains, Hidden pages. The sweet spot for professionals who've maxed out the free plan and need Unlimited pages, Custom domains."
+          },
+          {
+            "plan": "Team",
+            "price": 30,
+            "period": "Doc Maker/mo",
+            "advice": "$30/Doc Maker/mo gets you Shared permissions, Private docs, Advanced automations. 200% more than Pro - justified only if you need the extras. At this price point, also evaluate Height."
+          },
+          {
+            "plan": "Enterprise",
+            "price": null,
+            "period": "custom",
+            "advice": "Custom pricing for SSO, Audit logs, Advanced security. Always negotiate - ask for pilot pricing if testing with <50 seats, and push for annual discount commitments. Compare enterprise quotes against Height's equivalent tier."
+          }
+        ],
+        "verdict": "Coda scores 4.7/5 and offers a free plan - that's a rare combination. The free tier with Unlimited editors and Unlimited docs is more than enough to validate whether it fits your workflow. Start free. Move to Pro ($10/Doc Maker/mo) when Unlimited pages becomes a need, not a want."
+      },
+      "expertTake": "Formulas + Packs (Integrations) let you build a CRM or launch tracker without writing code — power that normally requires a developer. Skip if you want something ready out of the box; it rewards the team member willing to build.",
+      "bestFor": "Product & Ops Builders"
+    },
+    "Microsoft Teams": {
+      "slug": "microsoft-teams",
+      "name": "Microsoft Teams",
+      "url": "https://www.microsoft.com/microsoft-teams",
+      "category": "video-conferencing",
+      "subcategories": [
+        "meetings",
+        "chat",
+        "collaboration",
+        "enterprise"
+      ],
+      "description": "All-in-one collaboration hub with chat, meetings, and file sharing by Microsoft",
+      "pricing": {
+        "free": true,
+        "plans": [
+          {
+            "name": "Free",
+            "price": 0,
+            "period": "forever",
+            "highlights": [
+              "100 participants",
+              "60-min meetings",
+              "5GB storage"
+            ]
+          },
+          {
+            "name": "Microsoft Teams Essentials",
+            "price": 4,
+            "period": "user/mo",
+            "highlights": [
+              "300 participants",
+              "30-hr meetings"
+            ]
+          },
+          {
+            "name": "Microsoft 365 Business Basic",
+            "price": 6,
+            "period": "user/mo",
+            "highlights": [
+              "300 participants",
+              "1TB storage"
+            ]
+          },
+          {
+            "name": "Microsoft 365 Business Standard",
+            "price": 12.5,
+            "period": "user/mo",
+            "highlights": [
+              "Desktop Office apps",
+              "Webinars"
+            ]
+          }
+        ]
+      },
+      "features": [
+        "Video Meetings",
+        "Chat & Channels",
+        "File Sharing",
+        "Screen Sharing",
+        "Recording & Transcription",
+        "Breakout Rooms",
+        "Whiteboard",
+        "Together Mode",
+        "Background Effects",
+        "Live Captions",
+        "Polls",
+        "Copilot AI",
+        "Calendar Integration",
+        "Apps & Bots",
+        "Phone System"
+      ],
+      "rating": {
+        "g2": 4.3,
+        "capterra": 4.5
+      },
+      "founded": 2017,
+      "hq": "Redmond, WA (Microsoft)",
+      "users": "320M+ monthly active users",
+      "affiliate": {
+        "url": "https://partner.microsoft.com/",
+        "commission": "Microsoft Partner program",
+        "network": "Microsoft"
+      },
+      "featureCount": 15,
+      "longDescription": "With rated 4.4/5 across independent review platforms. Microsoft Teams has earned its place in the video conferencing market. All-in-one collaboration hub with chat, meetings, and file sharing by Microsoft Key capabilities include Video Meetings, Chat & Channels, File Sharing. Also covers Screen Sharing, Recording & Transcription. Free plan available; paid tiers from $4/mo. Used by 320M+ monthly active users teams worldwide.",
+      "youtubeId": "VDDPoYOQYfM",
+      "normalizedFeatures": {
+        "HD Video": true,
+        "Screen Sharing": true,
+        "Recording": true,
+        "Virtual Backgrounds": true,
+        "Breakout Rooms": true,
+        "Chat": true,
+        "Whiteboard": true,
+        "Polls/Q&A": true,
+        "Calendar Integration": true,
+        "API/SDK": true,
+        "Mobile App": true,
+        "Webinar Mode": false,
+        "Transcription": true,
+        "Noise Cancellation": false,
+        "End-to-End Encryption": true,
+        "Waiting Room": true,
+        "Hand Raise": true,
+        "Live Streaming": true,
+        "Analytics": true
+      },
+      "pros": [
+        "Free plan available",
+        "Affordable starting at $4/mo",
+        "Strong user ratings (4.3/5 on G2)",
+        "15 key features including Video Meetings and Chat & Channels",
+        "Multiple pricing tiers (4 plans) to match different needs"
+      ],
+      "cons": [
+        "Video quality depends on internet connection",
+        "Some advanced features locked behind higher tiers"
+      ],
+      "youtubeReview": "https://www.youtube.com/watch?v=vaeFzrIc9HU",
+      "useCases": [
+        {
+          "title": "Enterprise Incident Response Command Center",
+          "description": "Security teams establish a dedicated Teams channel where incident responders join video meetings with Screen Sharing enabled to investigate breaches in real time. Together Mode.",
+          "icon": "shield"
+        },
+        {
+          "title": "Medical Faculty Grand Rounds at Scale",
+          "description": "Teaching hospitals broadcast clinical case presentations to 500+ physicians across multiple campuses using Teams Video Meetings. Breakout Rooms split specialists into discussion.",
+          "icon": "team"
+        },
+        {
+          "title": "Product Roadmap Velocity Tracking",
+          "description": "Product managers run bi-weekly video syncs where engineering lead shares a live Whiteboard roadmap, dropping sticky notes into sprint columns and dependency graphs. File Sharing.",
+          "icon": "rocket"
+        }
+      ],
+      "youtubeUploadDate": "2021-01-08T11:00:08Z",
+      "pricingAnalysis": {
+        "overview": "Microsoft Teams - All-in-one collaboration hub with chat, meetings, and file sharing by Microsoft. The free tier gets you 100 participants, 60-min meetings, 5GB storage - a real plan, not a 14-day trial. Upgrading to Microsoft Teams Essentials ($4/user/mo) unlocks 300 participants and 30-hr meetings. At $4/mo, Microsoft Teams undercuts the $24/mo category average by 83%. For comparison, Riverside.fm starts at $19 and Loom at $18. The gap between Microsoft Teams Essentials ($4) and Microsoft 365 Business Standard ($12.5) is significant - the 3x multiplier only makes sense if you need Desktop Office apps.",
+        "planAdvice": [
+          {
+            "plan": "Free",
+            "price": 0,
+            "period": "forever",
+            "advice": "You get 100 participants, 60-min meetings, 5GB storage. What's locked behind the paywall: 300 participants, 30-hr meetings. If those matter, Microsoft Teams Essentials at $4/user/mo is the next step. Good enough for solo use and evaluation."
+          },
+          {
+            "plan": "Microsoft Teams Essentials",
+            "price": 4,
+            "period": "user/mo",
+            "advice": "$4/user/mo gets you 300 participants, 30-hr meetings. Team of 5 = $20/mo, team of 10 = $40/mo. The sweet spot for professionals who've maxed out the free plan and need 300 participants, 30-hr meetings."
+          },
+          {
+            "plan": "Microsoft 365 Business Basic",
+            "price": 6,
+            "period": "user/mo",
+            "advice": "$6/user/mo gets you 300 participants, 1TB storage. Team of 5 = $30/mo, team of 10 = $60/mo. The middle ground - enough for growing teams without enterprise overhead. Saves $6.5/user/mo vs. Microsoft 365 Business Standard."
+          },
+          {
+            "plan": "Microsoft 365 Business Standard",
+            "price": 12.5,
+            "period": "user/mo",
+            "advice": "$12.5/user/mo gets you Desktop Office apps, Webinars. Team of 5 = $62.5/mo, team of 10 = $125/mo. 108% more than Microsoft 365 Business Basic - justified only if you need the extras."
+          }
+        ],
+        "verdict": "Rated 4.4/5, Microsoft Teams at $4/mo is a value pick in its category. Start free. Move to Microsoft Teams Essentials ($4/user/mo) when 300 participants becomes a need, not a want. Also compare against Riverside.fm ($19/mo) before deciding."
+      },
+      "expertTake": "Recording & Transcription is baked in, not bolted on — and at $4/user it's the cheapest full bundle with Chat & Channels included. Worth it if you're deep in the Microsoft stack. Overkill for small teams just wanting quick calls.",
+      "bestFor": "Microsoft 365 teams"
+    },
+    "Slack": {
+      "slug": "slack-huddles",
+      "name": "Slack",
+      "url": "https://slack.com",
+      "category": "video-conferencing",
+      "subcategories": [
+        "team-chat",
+        "huddles",
+        "collaboration"
+      ],
+      "description": "Team communication platform with video huddles and screen sharing",
+      "pricing": {
+        "free": true,
+        "plans": [
+          {
+            "name": "Free",
+            "price": 0,
+            "period": "forever",
+            "highlights": [
+              "90 days history",
+              "1:1 huddles"
+            ]
+          },
+          {
+            "name": "Pro",
+            "price": 8.75,
+            "period": "user/mo",
+            "highlights": [
+              "Unlimited history",
+              "Group huddles"
+            ]
+          },
+          {
+            "name": "Business+",
+            "price": 15,
+            "period": "user/mo",
+            "highlights": [
+              "SAML SSO",
+              "Data exports"
+            ]
+          },
+          {
+            "name": "Enterprise Grid",
+            "price": null,
+            "period": "user/mo",
+            "highlights": [
+              "Unlimited workspaces",
+              "HIPAA"
+            ]
+          }
+        ]
+      },
+      "features": [
+        "Channels",
+        "Direct Messages",
+        "Huddles (Audio/Video)",
+        "Screen Sharing",
+        "Clips (Video Messages)",
+        "Workflows",
+        "Integrations (2600+)",
+        "File Sharing",
+        "Search",
+        "Threads",
+        "Canvas",
+        "Lists",
+        "AI Features",
+        "Slack Connect",
+        "Mobile Apps"
+      ],
+      "rating": {
+        "g2": 4.5,
+        "capterra": 4.7
+      },
+      "founded": 2013,
+      "hq": "San Francisco, CA (Salesforce)",
+      "users": "200K+ organizations",
+      "affiliate": {
+        "url": null,
+        "commission": "N/A",
+        "network": "N/A"
+      },
+      "featureCount": 15,
+      "longDescription": "Slack is the go-to communication platform for teams who need to stay connected and collaborative in a fast-paced work environment, allowing users to create channels, share files, and engage in real-time discussions. It's best suited for medium to large-sized teams, remote workers, and organizations with multiple departments that require seamless communication. One of Slack's key strengths is its ability to integrate with a wide range of third-party apps, making it a central hub for all work-related activities. Additionally, its customizable notifications and mobile accessibility ensure that team members stay informed and engaged. However, one notable weakness is that its free plan has limited storage and message history, which can be a drawback for teams with extensive collaboration needs or those who require long-term record-keeping. Overall, Slack is an excellent choice for teams that prioritize efficient communication and collaboration.",
+      "youtubeId": "Yt66-u5UVOM",
+      "normalizedFeatures": {
+        "HD Video": true,
+        "Screen Sharing": true,
+        "Recording": true,
+        "Virtual Backgrounds": false,
+        "Breakout Rooms": false,
+        "Chat": true,
+        "Whiteboard": false,
+        "Polls/Q&A": false,
+        "Calendar Integration": true,
+        "API/SDK": true,
+        "Mobile App": true,
+        "Webinar Mode": false,
+        "Transcription": false,
+        "Noise Cancellation": false,
+        "End-to-End Encryption": true,
+        "Waiting Room": false,
+        "Hand Raise": false,
+        "Live Streaming": false,
+        "Analytics": true
+      },
+      "pros": [
+        "Free plan available",
+        "Affordable starting at $8.75/mo",
+        "Highly rated (4.5/5 on G2)",
+        "15 key features including Channels and Direct Messages",
+        "Multiple pricing tiers (4 plans) to match different needs"
+      ],
+      "cons": [
+        "Video quality depends on internet connection",
+        "Some advanced features locked behind higher tiers"
+      ],
+      "youtubeReview": "https://www.youtube.com/watch?v=GNBd5eGlOv8",
+      "useCases": [
+        {
+          "title": "Async Product Feedback Loops with Clips",
+          "description": "Product teams record Clips (short video messages) of feature prototypes and post them directly in Channels, letting distributed stakeholders review and comment asynchronously.",
+          "icon": "zap"
+        },
+        {
+          "title": "Customer Onboarding via Huddles and Workflows",
+          "description": "Implementation teams trigger Workflows that automatically initiate Huddles with new clients at scheduled intervals, combining live screen sharing for hands-on setup with recorded.",
+          "icon": "rocket"
+        },
+        {
+          "title": "Cross-Border Recruitment Interviews in Channels",
+          "description": "Hiring panels conduct first-round video interviews directly in private Channels using Huddles, keeping interview notes, scorecards, and candidate Files in one searchable space.",
+          "icon": "team"
+        },
+        {
+          "title": "Real-Time Support Escalation with Direct Messages",
+          "description": "Customer success agents use Huddles in Direct Messages to pair with engineering on urgent account issues, screen-sharing live dashboards while both parties type notes into the.",
+          "icon": "clock"
+        }
+      ],
+      "youtubeUploadDate": "2023-03-31T17:00:16Z",
+      "pricingAnalysis": {
+        "overview": "Slack - Team communication platform with video huddles and screen sharing. The free tier gets you 90 days history, 1:1 huddles - a real plan, not a 14-day trial. Upgrading to Pro ($8.75/user/mo) unlocks Unlimited history and Group huddles. At $8.75/mo, Slack undercuts the $23/mo category average by 62%. For comparison, Riverside.fm starts at $19 and Loom at $18.",
+        "planAdvice": [
+          {
+            "plan": "Free",
+            "price": 0,
+            "period": "forever",
+            "advice": "You get 90 days history, 1:1 huddles. What's locked behind the paywall: unlimited history, group huddles. If those matter, Pro at $8.75/user/mo is the next step. Good enough for solo use and evaluation."
+          },
+          {
+            "plan": "Pro",
+            "price": 8.75,
+            "period": "user/mo",
+            "advice": "$8.75/user/mo gets you Unlimited history, Group huddles. Team of 5 = $43.75/mo, team of 10 = $87.5/mo. The sweet spot for professionals who've maxed out the free plan and need Unlimited history, Group huddles."
+          },
+          {
+            "plan": "Business+",
+            "price": 15,
+            "period": "user/mo",
+            "advice": "$15/user/mo gets you SAML SSO, Data exports. Team of 5 = $75/mo, team of 10 = $150/mo. 71% more than Pro - justified only if you need the extras."
+          },
+          {
+            "plan": "Enterprise Grid",
+            "price": null,
+            "period": "user/mo",
+            "advice": "Custom pricing for Unlimited workspaces, HIPAA. Always negotiate - ask for pilot pricing if testing with <50 seats, and push for annual discount commitments. Compare enterprise quotes against Riverside.fm's equivalent tier."
+          }
+        ],
+        "verdict": "Slack scores 4.6/5 and offers a free plan - that's a rare combination. The free tier with 90 days history and 1:1 huddles is more than enough to validate whether it fits your workflow. Start free. Move to Pro ($8.75/user/mo) when Unlimited history becomes a need, not a want. Also compare against Riverside.fm ($19/mo) before deciding."
+      },
+      "expertTake": "Huddles drop you into a voice/video call with one click from any Channel — no link, no invite, just tap and talk. Worth it if your team already lives in Slack. Skip if you're paying for a dedicated video tool and Slack separately — pick one.",
+      "bestFor": "Remote teams already using Slack",
+      "youtubeStats": {
+        "views": 497890,
+        "likes": 6320,
+        "fetchedAt": "2026-04-26T13:54:21.813Z"
+      },
+      "lastUpdated": "2026-04-26"
+    }
+  }
+}

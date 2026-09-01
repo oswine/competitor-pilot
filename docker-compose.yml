@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    profiles: [infra]
+    environment:
+      POSTGRES_DB: ci_agent
+      POSTGRES_USER: ci
+      POSTGRES_PASSWORD: ci
+    ports: ["5432:5432"]
+    volumes: ["postgres-data:/var/lib/postgresql/data"]
+  minio:
+    image: minio/minio:latest
+    profiles: [infra]
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ci-minio
+      MINIO_ROOT_PASSWORD: ci-minio-secret
+    ports: ["9000:9000", "9001:9001"]
+    volumes: ["minio-data:/data"]
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    profiles: [infra]
+    ports: ["16686:16686", "4317:4317"]
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    profiles: [observability]
+    ports: ["9090:9090"]
+    volumes: ["./ops/prometheus.yml:/etc/prometheus/prometheus.yml:ro", "./ops/prometheus-alerts.yml:/etc/prometheus/prometheus-alerts.yml:ro"]
+  grafana:
+    image: grafana/grafana:11.2.0
+    profiles: [observability]
+    ports: ["3000:3000"]
+    depends_on: [prometheus]
+    volumes: ["./ops/grafana:/var/lib/grafana/dashboards:ro"]
+volumes:
+  postgres-data:
+  minio-data:

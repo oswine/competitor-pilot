@@ -1,0 +1,15 @@
+groups:
+  - name: ci-agent
+    rules:
+      - alert: CIAgentRunErrors
+        expr: increase(ci_agent_runs_total{status="failed"}[10m]) > 0
+        for: 5m
+        labels: {severity: warning}
+      - alert: CIAgentHighLatency
+        expr: histogram_quantile(0.95, rate(ci_agent_run_seconds_bucket[10m])) > 900
+        for: 10m
+        labels: {severity: warning}
+      - alert: CIAgentPageFailures
+        expr: sum(rate(ci_agent_pages_total{result=~"failed|browser_escalation_failed"}[10m])) > 1
+        for: 10m
+        labels: {severity: warning}

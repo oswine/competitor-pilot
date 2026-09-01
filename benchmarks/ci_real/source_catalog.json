@@ -1,0 +1,88 @@
+{
+  "dataset": "CI-Real30",
+  "version": "1.0.0",
+  "retrieval_policy": "official public pages plus a pinned ComparEdge open-data snapshot",
+  "upstream": {
+    "name": "ComparEdge Awesome SaaS Comparison Data",
+    "repository": "https://github.com/comparedge/awesome-saas-comparison-data",
+    "commit": "cd518965af74332e47cc5145074c41742834d6b3",
+    "license": "CC BY 4.0",
+    "attribution": "Data from ComparEdge (comparedge.com)"
+  },
+  "products": [
+    {
+      "name": "Notion",
+      "pricing": {"url": "https://www.notion.com/pricing", "keywords": ["Free", "Plus", "Business", "Enterprise", "per member", "AI"]},
+      "ai": {"url": "https://www.notion.com/product/ai", "keywords": ["Notion AI", "Enterprise Search", "AI Meeting Notes", "agents", "security"]},
+      "security": {"url": "https://www.notion.com/security", "keywords": ["SOC 2", "ISO 27001", "SAML", "encryption", "data residency"]}
+    },
+    {
+      "name": "Coda",
+      "pricing": {"url": "https://coda.io/pricing", "keywords": ["Coda", "Free", "Pro", "Business", "Enterprise", "Doc Maker"]},
+      "ai": {"url": "https://coda.io/product/ai", "keywords": ["Coda AI", "AI assistant", "AI column", "AI block", "credits"]},
+      "security": {"url": "https://coda.io/trust/security", "keywords": ["SOC 2", "ISO", "SAML", "encryption", "security"]}
+    },
+    {
+      "name": "Asana",
+      "pricing": {"url": "https://asana.com/pricing", "keywords": ["Personal", "Starter", "Advanced", "Enterprise", "per user", "billed annually"]},
+      "ai": {"url": "https://asana.com/product/ai", "keywords": ["Asana AI", "Smart status", "Smart chat", "AI Studio", "work graph"]},
+      "security": {"url": "https://asana.com/trust", "keywords": ["SOC 2", "ISO 27001", "SAML 2.0", "encryption", "HIPAA"]}
+    },
+    {
+      "name": "monday.com",
+      "pricing": {"url": "https://monday.com/pricing", "keywords": ["Free", "Basic", "Standard", "Pro", "Enterprise", "seat"]},
+      "ai": {"url": "https://monday.com/blog/ai-agents/everything-monday-ai-can-do/", "keywords": ["monday AI", "Sidekick", "Agents", "Vibe", "MCP", "governance"]},
+      "security": {"url": "https://monday.com/trustcenter", "keywords": ["SOC", "ISO 27001", "HIPAA", "encryption", "security"]}
+    },
+    {
+      "name": "ClickUp",
+      "pricing": {"url": "https://clickup.com/pricing", "keywords": ["Free Forever", "Unlimited", "Business", "Enterprise", "per user"]},
+      "ai": {"url": "https://clickup.com/brain", "keywords": ["ClickUp Brain", "AI", "agents", "search", "automation"]},
+      "security": {"url": "https://clickup.com/security", "keywords": ["SOC 2", "ISO 27001", "SAML", "encryption", "HIPAA"]}
+    },
+    {
+      "name": "Linear",
+      "pricing": {"url": "https://linear.app/pricing", "keywords": ["Free", "Basic", "Business", "Enterprise", "per user"]},
+      "ai": {"url": "https://linear.app/ai", "keywords": ["Linear AI", "agents", "triage", "summarize", "semantic search"]},
+      "security": {"url": "https://linear.app/security", "keywords": ["SOC 2", "ISO 27001", "SAML", "encryption", "data residency"]}
+    },
+    {
+      "name": "Jira",
+      "pricing": {"url": "https://www.atlassian.com/en/software/jira/pricing", "keywords": ["Free", "Standard", "Premium", "Enterprise", "per user / month"]},
+      "ai": {"url": "https://www.atlassian.com/software/rovo", "keywords": ["Rovo", "AI", "agents", "search", "Atlassian Intelligence"]},
+      "security": {"url": "https://www.atlassian.com/trust/security/security-practices", "keywords": ["SOC 2", "ISO 27001", "SAML", "encryption", "tenant separation"]}
+    },
+    {
+      "name": "GitHub",
+      "pricing": {"url": "https://github.com/pricing", "keywords": ["Free", "Team", "Enterprise", "per user", "Copilot"]},
+      "ai": {"url": "https://github.com/features/copilot/plans", "keywords": ["Copilot Free", "Copilot Pro", "Copilot Business", "Copilot Enterprise", "premium requests"]},
+      "security": {"url": "https://github.com/security", "keywords": ["GitHub Advanced Security", "secret scanning", "code scanning", "SOC", "SAML"]}
+    },
+    {
+      "name": "GitLab",
+      "pricing": {"url": "https://about.gitlab.com/pricing/", "keywords": ["Free", "Premium", "Ultimate", "per user", "Duo"]},
+      "ai": {"url": "https://about.gitlab.com/blog/introduction-to-gitlab-duo-agent-platform/", "keywords": ["GitLab Duo Agent Platform", "Agentic Chat", "agents", "DevSecOps", "AI"]},
+      "security": {"url": "https://about.gitlab.com/security/", "keywords": ["security", "compliance", "SOC 2", "ISO 27001", "SAML"]}
+    },
+    {
+      "name": "Slack",
+      "pricing": {"url": "https://slack.com/pricing", "keywords": ["Free", "Pro", "Business+", "Enterprise+", "per user"]},
+      "ai": {"url": "https://slack.com/features/ai", "keywords": ["Slack AI", "search", "recap", "summaries", "enterprise search"]},
+      "security": {"url": "https://slack.com/trust/security", "keywords": ["SOC", "ISO 27001", "SAML", "encryption", "Enterprise Key Management"]}
+    },
+    {
+      "name": "Microsoft Teams",
+      "pricing": {"url": "https://www.microsoft.com/en-US/microsoft-365/microsoft-teams/compare-microsoft-teams-options", "keywords": ["Teams Essentials", "Business Basic", "Business Standard", "user/month", "Enterprise"]},
+      "ai": {"url": "https://www.microsoft.com/en-us/microsoft-365-copilot", "keywords": ["Microsoft 365 Copilot", "Copilot Chat", "agents", "Teams", "enterprise"]},
+      "security": {"url": "https://learn.microsoft.com/en-us/copilot/privacy-and-protections", "keywords": ["enterprise data protection", "prompts", "responses", "training", "GDPR"]}
+    }
+  ],
+  "pairs": [
+    ["Notion", "Coda"],
+    ["Asana", "monday.com"],
+    ["ClickUp", "Linear"],
+    ["Linear", "Jira"],
+    ["GitHub", "GitLab"],
+    ["Slack", "Microsoft Teams"]
+  ]
+}
