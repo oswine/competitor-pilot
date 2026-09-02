@@ -121,10 +121,22 @@ class SearchPlan(BaseModel):
     rationale: str = Field(min_length=1, max_length=1000)
 
 
+class IntentClassification(BaseModel):
+    """Semantic mode classification returned by the pre-search Router."""
+
+    model_config = ConfigDict(extra="forbid")
+    requested_mode: Literal["auto", "investigation", "monitor", "verify"]
+    selected_mode: Literal["investigation", "monitor", "verify"]
+    confidence: float = Field(ge=0, le=1)
+    signals: list[str] = Field(default_factory=list, max_length=12)
+    rationale: str = Field(min_length=1, max_length=1000)
+
+
 class RouterDecision(BaseModel):
     """Single pre-search Router result used by discovery and debate routing."""
 
     model_config = ConfigDict(extra="forbid")
+    intent: IntentClassification
     route: ResearchRoute
     search_plan: SearchPlan
 

@@ -5,7 +5,9 @@ import asyncio
 import json
 
 from ci_agent.agents import build_agents
-from ci_agent.mode import route_matches_mode, select_mode
+from ci_agent.mode import mode_decision_from_intent, route_matches_mode
+from ci_agent.models import ResearchRequest, RunBudget
+from ci_agent.search import validate_search_plan
 from ci_agent.settings import Settings
 
 
@@ -22,18 +24,30 @@ async def main() -> None:
         raise SystemExit("GEMAI_API_KEY is required")
     router = build_agents(settings)["router"]
     for brief in CASES:
-        decision = select_mode(brief)
         result = await router.run(json.dumps({
             "brief": brief,
             "competitors": ["Notion", "Coda"],
-            "mode": decision.selected_mode,
+            "mode": "auto",
             "search_budget": {"max_searches": 12, "max_pages": 30, "max_results_per_query": 5},
         }, ensure_ascii=False))
+        intent = result.output.intent
+        mode_decision = mode_decision_from_intent(intent, "auto")
+        if not route_matches_mode(mode_decision.selected_mode, result.output.route):
+            raise RuntimeError(
+                f"Router route {result.output.route.task_kind} is incompatible with {mode_decision.selected_mode}"
+            )
+        validate_search_plan(
+            result.output.search_plan,
+            result.output.route,
+            ResearchRequest(brief=brief, competitors=["Notion", "Coda"]),
+            RunBudget(max_searches=12, max_pages=30),
+        )
         print(json.dumps({
             "brief": brief,
-            "selected_mode": decision.selected_mode,
+            "selected_mode": mode_decision.selected_mode,
+            "intent_confidence": mode_decision.confidence,
             "task_kind": result.output.route.task_kind,
-            "compatible": route_matches_mode(decision.selected_mode, result.output.route),
+            "compatible": route_matches_mode(mode_decision.selected_mode, result.output.route),
             "search_plan": result.output.search_plan.model_dump(mode="json"),
         }, ensure_ascii=False))
 

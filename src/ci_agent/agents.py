@@ -125,8 +125,12 @@ def build_agents(settings: Settings) -> dict[str, Agent[Any, Any]]:
             ),
         ),
         instructions=(
-            "Before any web search, route the competitor-research task and return one RouterDecision containing both "
-            "route and search_plan. Classify requested research into pricing, product, and security dimensions. For "
+            "Before any web search, route the competitor-research task and return one RouterDecision containing intent, "
+            "route, and search_plan. Semantically classify the user's goal as exactly one of investigation (one-off "
+            "comparison or analysis), monitor (recurring change detection, alerts, or scheduled tracking), or verify "
+            "(check whether a specified fact is true). If mode is auto, select based on the user's goal rather than "
+            "isolated keywords; if an explicit mode is supplied, repeat and honor it. Classify requested research into "
+            "pricing, product, and security dimensions. For "
             "every requested dimension, generate focused queries that name a target competitor; when the supplied "
             "search budget permits, generate one query for every competitor/dimension pair. Pricing queries should "
             "prefer official pricing and billing pages, product queries official product/docs/integration/changelog "

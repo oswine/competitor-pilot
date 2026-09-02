@@ -19,9 +19,10 @@ from uuid import UUID, uuid5
 from ci_agent.agents import build_agents
 from ci_agent.context import build_context_pack
 from ci_agent.evidence import EvidenceLedger
-from ci_agent.models import Evidence, RunBudget, RunTrace, SourceType, TenantContext
-from ci_agent.mode import route_matches_mode, select_mode
+from ci_agent.models import Evidence, ResearchRequest, RunBudget, RunTrace, SourceType, TenantContext
+from ci_agent.mode import mode_decision_from_intent, route_matches_mode
 from ci_agent.route_policy import build_debate_plan, specialist_dimensions
+from ci_agent.search import validate_search_plan
 from ci_agent.settings import Settings
 
 NAMESPACE = UUID("2b6aaf94-2de1-4d4c-b86f-20f6ec68e34a")
@@ -147,34 +148,44 @@ async def evaluate_case(case: dict, agents: dict, settings: Settings) -> dict:
         evidence_lines.append(f"[{eid}] {item['source_url']}\n{item['excerpt']}")
 
     brief = case["task"]["prompt"]
-    mode_decision = select_mode(brief, "auto")
-    expected_mode = case["task"].get("mode")
-    if expected_mode and mode_decision.selected_mode != expected_mode:
-        raise ValueError(
-            f"auto mode {mode_decision.selected_mode} does not match benchmark mode {expected_mode}"
-        )
+    requested_mode = case["task"].get("mode", "auto")
     route_result = await call_with_retry(agents["router"], json.dumps({
-        "brief": brief, "competitors": case["task"].get("competitors", []), "mode": mode_decision.selected_mode,
+        "brief": brief, "competitors": case["task"].get("competitors", []), "mode": requested_mode,
         "search_budget": {"max_searches": budget.max_searches, "max_pages": budget.max_pages, "max_results_per_query": 5},
     }, ensure_ascii=False), trace=trace, role="router")
     router_decision = route_result.output
+    mode_decision = mode_decision_from_intent(router_decision.intent, requested_mode)
     route = router_decision.route
     if not route_matches_mode(mode_decision.selected_mode, route):
         trace.add("mode_route_mismatch", selected_mode=mode_decision.selected_mode, task_kind=route.task_kind)
         corrected_decision = (await call_with_retry(agents["router"], json.dumps({
             "correction_required": True, "brief": brief,
             "competitors": case["task"].get("competitors", []),
-            "selected_mode": mode_decision.selected_mode,
+            "selected_mode": requested_mode,
+            "requested_mode": requested_mode,
             "search_budget": {"max_searches": budget.max_searches, "max_pages": budget.max_pages, "max_results_per_query": 5},
-            "rule": "investigation=>extract/compare/deep_research, monitor=>monitor, verify=>verify/extract",
+            "rule": "intent must be semantically selected; investigation=>extract/compare/deep_research, monitor=>monitor, verify=>verify/extract",
             "previous_decision": router_decision.model_dump(mode="json"),
         }, ensure_ascii=False), trace=trace, role="router")).output
         router_decision = corrected_decision
+        mode_decision = mode_decision_from_intent(router_decision.intent, requested_mode)
         route = corrected_decision.route
+    expected_mode = case["task"].get("expected_mode") or case["task"].get("mode")
+    if expected_mode and mode_decision.selected_mode != expected_mode:
+        raise ValueError(
+            f"semantic mode {mode_decision.selected_mode} does not match benchmark mode {expected_mode}"
+        )
     if not route_matches_mode(mode_decision.selected_mode, route):
         raise ValueError(f"router task_kind {route.task_kind} is incompatible with mode {mode_decision.selected_mode}")
+    validation_request = ResearchRequest(
+        brief=brief,
+        competitors=case["task"].get("competitors", []),
+        mode=mode_decision.selected_mode,
+    )
+    validate_search_plan(router_decision.search_plan, route, validation_request, budget)
     mode_decision.router_validated = True
     trace.add("mode_validated", decision=mode_decision.model_dump(mode="json"), task_kind=route.task_kind)
+    trace.add("intent_classified", intent=router_decision.intent.model_dump(mode="json"), requested_mode=requested_mode)
     debate_plan = build_debate_plan(
         route,
         mode=mode_decision.selected_mode,
@@ -354,6 +365,7 @@ async def evaluate_case(case: dict, agents: dict, settings: Settings) -> dict:
         "output": {
             "report": written.model_dump(mode="json"),
             "mode_decision": mode_decision.model_dump(mode="json"),
+            "intent": router_decision.intent.model_dump(mode="json"),
             "finding": bundle.finding.model_dump(mode="json"),
             "claims": [claim.model_dump(mode="json") for claim in bundle.claims],
             "debate_plan": debate_plan.model_dump(mode="json"),

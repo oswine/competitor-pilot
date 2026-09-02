@@ -11,8 +11,8 @@ from .agents import build_agents
 from .browser import BrowserCollector
 from .context import build_context_pack
 from .evidence import EvidenceLedger
-from .models import Claim, CompetitiveResearchReport, DebatePlan, Evidence, ResearchBundle, ResearchRequest, ResearchRoute, RunBudget, RunTrace, SearchPlan, TenantContext, VerifiedFinding
-from .mode import route_matches_mode, select_mode
+from .models import Claim, CompetitiveResearchReport, DebatePlan, Evidence, IntentClassification, ResearchBundle, ResearchRequest, ResearchRoute, RunBudget, RunTrace, SearchPlan, TenantContext, VerifiedFinding
+from .mode import mode_decision_from_intent, mode_from_route, route_matches_mode, select_mode
 from .object_store import ObjectStore
 from .persistence import PostgresRepository
 from .telemetry import span
@@ -69,7 +69,7 @@ class ResearchOrchestrator:
         budget: RunBudget,
         context: TenantContext,
         fixed_route: ResearchRoute | None = None,
-    ) -> tuple[ResearchRoute, SearchPlan]:
+    ) -> tuple[ResearchRoute, SearchPlan, IntentClassification]:
         """Ask the Router once, then enforce mode, scope, and search budgets."""
 
         prompt: dict = {
@@ -83,7 +83,7 @@ class ResearchOrchestrator:
                 "max_results_per_query": 5,
             },
             "required_output": (
-                "Return route and search_plan. Use separate pricing, product, and security queries for every requested "
+                "Return intent, route, and search_plan. Use separate pricing, product, and security queries for every requested "
                 "dimension. When the budget permits, cover every competitor/dimension pair."
             ),
         }
@@ -99,11 +99,25 @@ class ResearchOrchestrator:
             decision = result.output
             errors: list[str] = []
             route = fixed_route or decision.route
+            effective_mode = decision.intent.selected_mode
+            if decision.intent.requested_mode != request.mode:
+                errors.append(
+                    f"intent requested_mode {decision.intent.requested_mode} does not match request mode {request.mode}"
+                )
+            if request.mode != "auto" and effective_mode != request.mode:
+                errors.append(
+                    f"intent selected_mode {effective_mode} conflicts with explicit mode {request.mode}"
+                )
             if fixed_route is not None and decision.route != fixed_route:
                 errors.append("route must exactly match the checkpoint fixed_route")
-            if not route_matches_mode(request.mode, route):
+            if fixed_route is not None and effective_mode != mode_from_route(fixed_route):
                 errors.append(
-                    f"task_kind {route.task_kind} is incompatible with mode {request.mode}"
+                    f"intent selected_mode {effective_mode} conflicts with checkpoint route mode "
+                    f"{mode_from_route(fixed_route)}"
+                )
+            if not route_matches_mode(effective_mode, route):
+                errors.append(
+                    f"task_kind {route.task_kind} is incompatible with semantic mode {effective_mode}"
                 )
             try:
                 validate_search_plan(decision.search_plan, route, request, budget)
@@ -119,7 +133,12 @@ class ResearchOrchestrator:
                     "search_plan_selected",
                     search_plan=decision.search_plan.model_dump(mode="json"),
                 )
-                return route, decision.search_plan
+                trace.add(
+                    "intent_classified",
+                    intent=decision.intent.model_dump(mode="json"),
+                    requested_mode=request.mode,
+                )
+                return route, decision.search_plan, decision.intent
 
             last_error = ValueError("; ".join(errors))
             trace.add(
@@ -132,6 +151,8 @@ class ResearchOrchestrator:
                 "brief": request.brief,
                 "competitors": request.competitors,
                 "selected_mode": request.mode,
+                "requested_mode": request.mode,
+                "previous_intent": decision.intent.model_dump(mode="json"),
                 "search_budget": {
                     "max_searches": budget.max_searches,
                     "max_pages": budget.max_pages,
@@ -140,7 +161,7 @@ class ResearchOrchestrator:
                 "previous_decision": decision.model_dump(mode="json"),
                 "errors": errors,
                 "rule": (
-                    "Return a mode-compatible route and a bounded SearchPlan. Every query must name exactly one supplied "
+                    "Return a semantically classified intent, a mode-compatible route, and a bounded SearchPlan. Every query must name exactly one supplied "
                     "competitor. Cover every requested pricing/product/security dimension and, when query budget allows, "
                     "every competitor/dimension pair. Keep total max_results within max_pages."
                 ),
@@ -285,8 +306,8 @@ class ResearchOrchestrator:
                   idempotency_key: str | None = None) -> tuple[CompetitiveResearchReport, RunTrace]:
         context = context or TenantContext(tenant_id=self.settings.tenant_default, user_id="local", role="researcher")
         idempotency_key = idempotency_key or hashlib.sha256((context.tenant_id + request.model_dump_json()).encode()).hexdigest()
-        mode_decision = select_mode(request.brief, request.mode)
-        request = request.model_copy(update={"mode": mode_decision.selected_mode})
+        requested_mode = request.mode
+        mode_decision = select_mode(request.brief, requested_mode)
         if self.repository:
             existing = self.repository.get_idempotent_run(idempotency_key, context.tenant_id)
             if existing and existing.report_json:
@@ -312,12 +333,19 @@ class ResearchOrchestrator:
                            max_cost_cny=self.settings.max_cost_cny, timeout_seconds=self.settings.run_timeout_seconds)
         if checkpoint_phase == "started" and not checkpoint_payload:
             trace.add("run_started", budget=budget.model_dump(mode="json"), mode=request.mode, tenant_id=context.tenant_id)
-            trace.add("mode_selected", decision=mode_decision.model_dump(mode="json"))
+            if requested_mode == "auto":
+                trace.add("mode_classification_pending", requested_mode="auto")
+            else:
+                trace.add("mode_selected", decision=mode_decision.model_dump(mode="json"))
         active_playbook = self.playbooks.active(context.tenant_id)
 
-        if checkpoint_payload.get("route") and checkpoint_payload.get("search_plan"):
+        intent: IntentClassification
+        if checkpoint_payload.get("route") and checkpoint_payload.get("search_plan") and checkpoint_payload.get("intent"):
             route = ResearchRoute.model_validate(checkpoint_payload["route"])
             search_plan = SearchPlan.model_validate(checkpoint_payload["search_plan"])
+            intent = IntentClassification.model_validate(checkpoint_payload["intent"])
+            mode_decision = mode_decision_from_intent(intent, requested_mode)
+            request = request.model_copy(update={"mode": mode_decision.selected_mode})
             if not route_matches_mode(request.mode, route):
                 raise ValueError(f"checkpoint route {route.task_kind} is incompatible with mode {request.mode}")
             validate_search_plan(search_plan, route, request, budget)
@@ -329,14 +357,17 @@ class ResearchOrchestrator:
                 if checkpoint_payload.get("route")
                 else None
             )
-            route, search_plan = await self._route_with_search_plan(
+            route, search_plan, intent = await self._route_with_search_plan(
                 request,
                 trace,
                 budget,
                 context,
                 fixed_route=legacy_route,
             )
-            mode_decision.router_validated = True
+            mode_decision = mode_decision_from_intent(intent, requested_mode)
+            request = request.model_copy(update={"mode": mode_decision.selected_mode})
+            if not route_matches_mode(request.mode, route):
+                raise ValueError(f"router task_kind {route.task_kind} is incompatible with mode {request.mode}")
             trace.add("mode_validated", decision=mode_decision.model_dump(mode="json"), task_kind=route.task_kind)
             if legacy_route is not None:
                 trace.add("legacy_checkpoint_search_plan_created", query_count=len(search_plan.queries))
@@ -474,6 +505,7 @@ class ResearchOrchestrator:
                     "reusable_knowledge": reusable_knowledge,
                     "route": route.model_dump(mode="json"),
                     "search_plan": search_plan.model_dump(mode="json"),
+                    "intent": intent.model_dump(mode="json"),
                     "debate_plan": debate_plan.model_dump(mode="json"),
                 }, self.settings.run_checkpoint_lease_seconds)
         if not evidence:
@@ -633,6 +665,7 @@ class ResearchOrchestrator:
                     "reusable_knowledge": reusable_knowledge,
                     "route": route.model_dump(mode="json"),
                     "search_plan": search_plan.model_dump(mode="json"),
+                    "intent": intent.model_dump(mode="json"),
                     "debate_plan": debate_plan.model_dump(mode="json"),
                     "bundle": bundle.model_dump(mode="json"),
                 }, self.settings.run_checkpoint_lease_seconds)

@@ -64,8 +64,9 @@ flowchart TD
 
 ## 核心能力
 
-- 根据输入自动选择 `investigation`、`monitor` 或 `verify`，并独立校验 Router 的任务类型是否与模式兼容。
+- 根据输入由 Router 语义选择 `investigation`、`monitor` 或 `verify`，并独立校验 Router 的任务类型是否与模式兼容；关键词仅作为模型可解释信号记录，不作为生产分类器。
 - Router 在任何外部搜索前一次性返回结构化 `RouterDecision`：`ResearchRoute` 决定任务类型、维度和风险，`SearchPlan` 按 `pricing`、`product`、`security` 为目标竞品生成独立查询；宿主校验竞品/维度覆盖、重复查询、搜索次数和页面预算后才允许执行。
+- `IntentClassification` 是独立可评测的语义分类结果，记录选择模式、置信度、解释信号和理由；`mode=auto` 不再由关键词规则决定，显式模式则作为操作员约束由 Router 确认。
 - 搜索不是 Agent 自主执行的工具调用。Router 只生成计划，`ResearchOrchestrator` 根据显式 URL、checkpoint 和预算决定是否执行，再由 `TavilySearch` 和 `BrowserCollector` 完成搜索与抓取。Researcher 只接收经过 robots/URL 策略、提示词注入隔离、证据账本和 EvidenceCard 压缩后的内容，因此外部网页不能改变 Agent 流程或产生副作用。
 - 宿主层根据 `ResearchRoute` 生成受预算约束的 `DebatePlan`：按维度激活 0-2 个领域专家，高风险时增加 Challenger；所有路径都经过终端 Arbitrator，LLM 失败时进入确定性的 ArbitratorLite。
 - Pydantic 模型约束 Router、Evidence、Claim、Finding、Report、预算和 trace，不依赖自由文本约定关键业务合同。
@@ -87,7 +88,7 @@ flowchart TD
 
 执行顺序固定为 `Router -> SearchPlan 校验与采集 -> Researcher -> 0..2 个领域专家 -> 可选 Challenger -> Arbitrator -> Writer`。领域专家由宿主的确定性 `DebatePlan` 选择，而不是直接信任模型返回的调用数量：价格维度使用 `pricing`，AI/产品/集成使用 `product`，安全/合规使用 `security`。企业或高风险任务会限制为一个领域专家并增加 Challenger，以保持最多四次预裁决 Agent 调用；低风险任务可以没有领域专家，但仍经过 Arbitrator 终端门。
 
-`mode=auto` 先由 [mode.py](./src/ci_agent/mode.py) 识别显式模式和监控/验证信号，再由 PydanticAI Router 细化 `task_kind`、复杂度和维度，最后用 [route_policy.py](./src/ci_agent/route_policy.py) 生成可执行计划。Router 的 `required_agents` 只是建议，不能绕过宿主预算、安全和证据边界。
+`mode=auto` 由 PydanticAI Router 通过结构化 `IntentClassification` 语义判断 `investigation`、`monitor` 或 `verify`，再细化 `task_kind`、复杂度和维度；显式 `mode` 是宿主保留的操作员覆盖，Router 必须确认该模式。最后用 [route_policy.py](./src/ci_agent/route_policy.py) 生成可执行计划。Router 的 `required_agents` 只是建议，不能绕过宿主预算、安全和证据边界。
 
 输出不是单段回答，而是一个可审计 artifact：结构化报告、Verified Findings、Claims、Evidence UUID、未知项、建议、执行 trace、原始快照引用和审批状态。API 支持 JSON、Markdown 和包含证据的 ZIP bundle 导出。
 
