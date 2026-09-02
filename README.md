@@ -26,17 +26,21 @@ flowchart TD
     UI[Next.js / TypeScript 控制台] -->|JSON API| API[FastAPI]
     API --> AUTH[Tenant API Key / RBAC / Idempotency]
     AUTH --> MODE[Auto Mode Selector]
-    MODE --> ROUTER[PydanticAI Router]
-    ROUTER --> SEARCH[Tavily Search]
-    SEARCH --> BROWSER[HTTP / Playwright Browser Pool]
+    MODE --> DISCOVER[Host Evidence Discovery]
+    DISCOVER -->|无显式 URL| SEARCH[Tavily Search Adapter]
+    DISCOVER -->|已有 URL| BROWSER[HTTP / Playwright Browser Pool]
+    SEARCH --> BROWSER
+    DISCOVER -->|checkpoint 已有证据| RESTORE[Restore Evidence]
     BROWSER --> GUARD[Robots / URL Policy / Injection Guard]
+    RESTORE --> GUARD
     GUARD --> RAW[Raw Snapshot / PDF / DOCX / HAR / Screenshot]
     RAW --> MINIO[(MinIO)]
     RAW --> LEDGER[Immutable Evidence Ledger]
     LEDGER --> PG[(PostgreSQL)]
     LEDGER --> CARDS[Evidence Cards + Token Budget + MMR]
-    CARDS --> RESEARCHER[Researcher]
-    RESEARCHER --> PLAN[Deterministic DebatePlan]
+    CARDS --> ROUTER[PydanticAI Router]
+    ROUTER --> PLAN[Deterministic DebatePlan]
+    PLAN --> RESEARCHER
     PLAN -->|pricing| PRICING[Pricing Specialist]
     PLAN -->|product / AI| PRODUCT[Product Specialist]
     PLAN -->|security / compliance| SECURITY[Security Specialist]
@@ -59,7 +63,8 @@ flowchart TD
 ## 核心能力
 
 - 根据输入自动选择 `investigation`、`monitor` 或 `verify`，并独立校验 Router 的任务类型是否与模式兼容。
-- Router 先给出任务类型、维度和风险提示，宿主层再生成受预算约束的 `DebatePlan`：按 `pricing`、`product`、`security` 维度激活 0-2 个领域专家，高风险时增加 Challenger；所有路径都经过终端 Arbitrator，LLM 失败时进入确定性的 ArbitratorLite。
+- 证据发现和安全清洗完成后，Router 给出任务类型、维度和风险提示；宿主层再生成受预算约束的 `DebatePlan`：按 `pricing`、`product`、`security` 维度激活 0-2 个领域专家，高风险时增加 Challenger；所有路径都经过终端 Arbitrator，LLM 失败时进入确定性的 ArbitratorLite。
+- 搜索不是 Agent 自主执行的工具调用。`ResearchOrchestrator` 根据显式 URL、checkpoint 和预算决定是否调用 `TavilySearch`，该适配器通过 HTTPX 请求搜索服务；随后由 `BrowserCollector` 抓取页面。Researcher 只接收经过 robots/URL 策略、提示词注入隔离、证据账本和 EvidenceCard 压缩后的内容，因此外部网页不能直接改变 Agent 流程或产生副作用。
 - Pydantic 模型约束 Router、Evidence、Claim、Finding、Report、预算和 trace，不依赖自由文本约定关键业务合同。
 - PydanticAI Harness 提供 DynamicWorkflow、Planning、StepPersistence 和工具输出限制；宿主层继续负责 tenant、安全、浏览、预算和发布边界。
 - PostgreSQL checkpoint 与运行租约支持三种模式中断后继续，避免两个 worker 同时恢复同一运行。
