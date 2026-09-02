@@ -11,14 +11,14 @@ from .agents import build_agents
 from .browser import BrowserCollector
 from .context import build_context_pack
 from .evidence import EvidenceLedger
-from .models import Claim, CompetitiveResearchReport, DebatePlan, Evidence, ResearchBundle, ResearchRequest, ResearchRoute, RunBudget, RunTrace, TenantContext, VerifiedFinding
+from .models import Claim, CompetitiveResearchReport, DebatePlan, Evidence, ResearchBundle, ResearchRequest, ResearchRoute, RunBudget, RunTrace, SearchPlan, TenantContext, VerifiedFinding
 from .mode import route_matches_mode, select_mode
 from .object_store import ObjectStore
 from .persistence import PostgresRepository
 from .telemetry import span
 from .metrics import RUNS, PAGES, RUN_SECONDS
 import time
-from .search import TavilySearch
+from .search import TavilySearch, validate_search_plan
 from .settings import Settings
 from .playbook import PlaybookReplay, ResearchPlaybookStore
 from .route_policy import build_debate_plan, specialist_dimensions
@@ -61,6 +61,94 @@ class ResearchOrchestrator:
             async with asyncio.timeout(min(180, budget.timeout_seconds)):
                 return await self.agents[fallback_name].run(prompt)
         raise last_error or RuntimeError(f"agent call failed: {agent_name}")
+
+    async def _route_with_search_plan(
+        self,
+        request: ResearchRequest,
+        trace: RunTrace,
+        budget: RunBudget,
+        context: TenantContext,
+        fixed_route: ResearchRoute | None = None,
+    ) -> tuple[ResearchRoute, SearchPlan]:
+        """Ask the Router once, then enforce mode, scope, and search budgets."""
+
+        prompt: dict = {
+            "brief": request.brief,
+            "competitors": request.competitors,
+            "mode": request.mode,
+            "explicit_urls": [str(item) for item in request.urls],
+            "search_budget": {
+                "max_searches": budget.max_searches,
+                "max_pages": budget.max_pages,
+                "max_results_per_query": 5,
+            },
+            "required_output": (
+                "Return route and search_plan. Use separate pricing, product, and security queries for every requested "
+                "dimension. When the budget permits, cover every competitor/dimension pair."
+            ),
+        }
+        if fixed_route is not None:
+            prompt["fixed_route"] = fixed_route.model_dump(mode="json")
+            prompt["fixed_route_rule"] = "Copy fixed_route exactly; only generate the missing search_plan."
+        last_error: Exception | None = None
+        for semantic_attempt in range(2):
+            with span("agent.router", tenant_id=context.tenant_id, run_id=str(trace.run_id)):
+                result = await self._bounded_agent_call(
+                    "router", json.dumps(prompt, ensure_ascii=False), trace, budget
+                )
+            decision = result.output
+            errors: list[str] = []
+            route = fixed_route or decision.route
+            if fixed_route is not None and decision.route != fixed_route:
+                errors.append("route must exactly match the checkpoint fixed_route")
+            if not route_matches_mode(request.mode, route):
+                errors.append(
+                    f"task_kind {route.task_kind} is incompatible with mode {request.mode}"
+                )
+            try:
+                validate_search_plan(decision.search_plan, route, request, budget)
+            except ValueError as exc:
+                errors.append(str(exc))
+            if not errors:
+                trace.add(
+                    "route_selected",
+                    route=route.model_dump(mode="json"),
+                    phase="pre_search",
+                )
+                trace.add(
+                    "search_plan_selected",
+                    search_plan=decision.search_plan.model_dump(mode="json"),
+                )
+                return route, decision.search_plan
+
+            last_error = ValueError("; ".join(errors))
+            trace.add(
+                "router_decision_rejected",
+                semantic_attempt=semantic_attempt + 1,
+                errors=errors,
+            )
+            prompt = {
+                "correction_required": True,
+                "brief": request.brief,
+                "competitors": request.competitors,
+                "selected_mode": request.mode,
+                "search_budget": {
+                    "max_searches": budget.max_searches,
+                    "max_pages": budget.max_pages,
+                    "max_results_per_query": 5,
+                },
+                "previous_decision": decision.model_dump(mode="json"),
+                "errors": errors,
+                "rule": (
+                    "Return a mode-compatible route and a bounded SearchPlan. Every query must name exactly one supplied "
+                    "competitor. Cover every requested pricing/product/security dimension and, when query budget allows, "
+                    "every competitor/dimension pair. Keep total max_results within max_pages."
+                ),
+            }
+            if fixed_route is not None:
+                prompt["fixed_route"] = fixed_route.model_dump(mode="json")
+                prompt["fixed_route_rule"] = "Copy fixed_route exactly; only repair search_plan."
+        raise ValueError(f"Router SearchPlan contract failed after correction: {last_error}")
 
     def _apply_bundle_harness(
         self,
@@ -227,6 +315,46 @@ class ResearchOrchestrator:
             trace.add("mode_selected", decision=mode_decision.model_dump(mode="json"))
         active_playbook = self.playbooks.active(context.tenant_id)
 
+        if checkpoint_payload.get("route") and checkpoint_payload.get("search_plan"):
+            route = ResearchRoute.model_validate(checkpoint_payload["route"])
+            search_plan = SearchPlan.model_validate(checkpoint_payload["search_plan"])
+            if not route_matches_mode(request.mode, route):
+                raise ValueError(f"checkpoint route {route.task_kind} is incompatible with mode {request.mode}")
+            validate_search_plan(search_plan, route, request, budget)
+            mode_decision.router_validated = True
+            trace.add("checkpoint_routing_restored", query_count=len(search_plan.queries))
+        else:
+            legacy_route = (
+                ResearchRoute.model_validate(checkpoint_payload["route"])
+                if checkpoint_payload.get("route")
+                else None
+            )
+            route, search_plan = await self._route_with_search_plan(
+                request,
+                trace,
+                budget,
+                context,
+                fixed_route=legacy_route,
+            )
+            mode_decision.router_validated = True
+            trace.add("mode_validated", decision=mode_decision.model_dump(mode="json"), task_kind=route.task_kind)
+            if legacy_route is not None:
+                trace.add("legacy_checkpoint_search_plan_created", query_count=len(search_plan.queries))
+
+        debate_plan = DebatePlan.model_validate(checkpoint_payload["debate_plan"]) if checkpoint_payload.get("debate_plan") else build_debate_plan(
+            route,
+            mode=request.mode,
+            dimensions=route.dimensions,
+            brief=request.brief,
+        )
+        if debate_plan.max_agent_calls > budget.max_agent_calls:
+            raise RuntimeError(
+                "routing plan exceeds run agent budget: "
+                f"required={debate_plan.max_agent_calls}; allowed={budget.max_agent_calls}"
+            )
+        if not checkpoint_payload.get("debate_plan"):
+            trace.add("debate_plan_selected", plan=debate_plan.model_dump(mode="json"))
+
         evidence: list[Evidence] = []
         quarantined_evidence_ids: set[UUID] = set()
         reusable_knowledge: list[dict] = list(checkpoint_payload.get("reusable_knowledge", []))
@@ -256,10 +384,41 @@ class ResearchOrchestrator:
                               policy="fresh_tenant_scoped")
             urls = [str(u) for u in request.urls]
             if not urls:
-                query = f"{' '.join(request.competitors)} {request.brief}"
-                results = await self.search.search(query, max_results=min(5, budget.max_pages))
-                urls = [str(item.url) for item in results.results]
-                trace.add("search_completed", count=len(urls), query=query)
+                seen_urls: set[str] = set()
+                for planned_query in search_plan.queries:
+                    results = await self.search.search(
+                        planned_query.query,
+                        max_results=planned_query.max_results,
+                    )
+                    added = 0
+                    for result in results.results:
+                        url = str(result.url)
+                        normalized = url.rstrip("/").casefold()
+                        if normalized in seen_urls:
+                            continue
+                        seen_urls.add(normalized)
+                        urls.append(url)
+                        added += 1
+                    trace.add(
+                        "search_query_completed",
+                        dimension=planned_query.dimension,
+                        competitor=planned_query.competitor,
+                        source_focus=planned_query.source_focus,
+                        query=planned_query.query,
+                        returned=len(results.results),
+                        unique_added=added,
+                    )
+                trace.add(
+                    "search_completed",
+                    query_count=len(search_plan.queries),
+                    unique_url_count=len(urls),
+                )
+            else:
+                trace.add(
+                    "search_plan_not_executed",
+                    reason="explicit_urls_supplied",
+                    query_count=len(search_plan.queries),
+                )
             if not urls:
                 raise RuntimeError("search returned no URLs")
             for url in urls[:budget.max_pages]:
@@ -313,6 +472,9 @@ class ResearchOrchestrator:
                     "evidence": [item.model_dump(mode="json") for item in evidence],
                     "quarantined_evidence_ids": [str(item) for item in quarantined_evidence_ids],
                     "reusable_knowledge": reusable_knowledge,
+                    "route": route.model_dump(mode="json"),
+                    "search_plan": search_plan.model_dump(mode="json"),
+                    "debate_plan": debate_plan.model_dump(mode="json"),
                 }, self.settings.run_checkpoint_lease_seconds)
         if not evidence:
             raise RuntimeError("all candidate pages failed browser collection")
@@ -330,54 +492,10 @@ class ResearchOrchestrator:
         trace.add("context_compacted", card_count=len(context_pack.cards), token_count=context_pack.token_count,
                   excluded_evidence_ids=[str(item) for item in context_pack.excluded_evidence_ids])
         if checkpoint_phase == "bundle_verified" and checkpoint_payload.get("bundle"):
-            route = ResearchRoute.model_validate(checkpoint_payload["route"])
-            debate_plan = DebatePlan.model_validate(
-                checkpoint_payload.get(
-                    "debate_plan",
-                    build_debate_plan(
-                        route,
-                        mode=request.mode,
-                        dimensions=route.dimensions,
-                        brief=request.brief,
-                    ).model_dump(mode="json"),
-                )
-            )
             bundle = ResearchBundle.model_validate(checkpoint_payload["bundle"])
             finding = self._verify_bundle_scope(bundle, evidence, request.competitors, route.dimensions, request.mode)
             trace.add("checkpoint_bundle_restored", finding_id=finding.finding_id)
         else:
-            with span("agent.router", tenant_id=context.tenant_id, run_id=str(trace.run_id)):
-                route_result = await self._bounded_agent_call("router", json.dumps({
-                    "brief": request.brief, "competitors": request.competitors, "mode": request.mode,
-                }, ensure_ascii=False), trace, budget)
-            route = route_result.output
-            if not route_matches_mode(request.mode, route):
-                trace.add("mode_route_mismatch", selected_mode=request.mode, task_kind=route.task_kind)
-                route = (await self._bounded_agent_call("router", json.dumps({
-                    "correction_required": True,
-                    "brief": request.brief,
-                    "competitors": request.competitors,
-                    "selected_mode": request.mode,
-                    "rule": "Return a route compatible with selected_mode: investigation=>extract/compare/deep_research, monitor=>monitor, verify=>verify/extract.",
-                    "previous_route": route.model_dump(mode="json"),
-                }, ensure_ascii=False), trace, budget, retries=1)).output
-            if not route_matches_mode(request.mode, route):
-                raise ValueError(f"router task_kind {route.task_kind} is incompatible with mode {request.mode}")
-            mode_decision.router_validated = True
-            trace.add("mode_validated", decision=mode_decision.model_dump(mode="json"), task_kind=route.task_kind)
-            trace.add("route_selected", route=route.model_dump(mode="json"))
-            debate_plan = build_debate_plan(
-                route,
-                mode=request.mode,
-                dimensions=route.dimensions,
-                brief=request.brief,
-            )
-            if debate_plan.max_agent_calls > budget.max_agent_calls:
-                raise RuntimeError(
-                    "routing plan exceeds run agent budget: "
-                    f"required={debate_plan.max_agent_calls}; allowed={budget.max_agent_calls}"
-                )
-            trace.add("debate_plan_selected", plan=debate_plan.model_dump(mode="json"))
             finding_prompt = json.dumps({
                 "brief": request.brief,
                 "route": route.model_dump(mode="json"),
@@ -514,6 +632,7 @@ class ResearchOrchestrator:
                     "quarantined_evidence_ids": [str(item) for item in quarantined_evidence_ids],
                     "reusable_knowledge": reusable_knowledge,
                     "route": route.model_dump(mode="json"),
+                    "search_plan": search_plan.model_dump(mode="json"),
                     "debate_plan": debate_plan.model_dump(mode="json"),
                     "bundle": bundle.model_dump(mode="json"),
                 }, self.settings.run_checkpoint_lease_seconds)

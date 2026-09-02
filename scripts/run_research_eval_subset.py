@@ -155,16 +155,22 @@ async def evaluate_case(case: dict, agents: dict, settings: Settings) -> dict:
         )
     route_result = await call_with_retry(agents["router"], json.dumps({
         "brief": brief, "competitors": case["task"].get("competitors", []), "mode": mode_decision.selected_mode,
+        "search_budget": {"max_searches": budget.max_searches, "max_pages": budget.max_pages, "max_results_per_query": 5},
     }, ensure_ascii=False), trace=trace, role="router")
-    route = route_result.output
+    router_decision = route_result.output
+    route = router_decision.route
     if not route_matches_mode(mode_decision.selected_mode, route):
         trace.add("mode_route_mismatch", selected_mode=mode_decision.selected_mode, task_kind=route.task_kind)
-        route = (await call_with_retry(agents["router"], json.dumps({
+        corrected_decision = (await call_with_retry(agents["router"], json.dumps({
             "correction_required": True, "brief": brief,
+            "competitors": case["task"].get("competitors", []),
             "selected_mode": mode_decision.selected_mode,
+            "search_budget": {"max_searches": budget.max_searches, "max_pages": budget.max_pages, "max_results_per_query": 5},
             "rule": "investigation=>extract/compare/deep_research, monitor=>monitor, verify=>verify/extract",
-            "previous_route": route.model_dump(mode="json"),
+            "previous_decision": router_decision.model_dump(mode="json"),
         }, ensure_ascii=False), trace=trace, role="router")).output
+        router_decision = corrected_decision
+        route = corrected_decision.route
     if not route_matches_mode(mode_decision.selected_mode, route):
         raise ValueError(f"router task_kind {route.task_kind} is incompatible with mode {mode_decision.selected_mode}")
     mode_decision.router_validated = True
@@ -351,6 +357,7 @@ async def evaluate_case(case: dict, agents: dict, settings: Settings) -> dict:
             "finding": bundle.finding.model_dump(mode="json"),
             "claims": [claim.model_dump(mode="json") for claim in bundle.claims],
             "debate_plan": debate_plan.model_dump(mode="json"),
+            "search_plan": router_decision.search_plan.model_dump(mode="json"),
             "evidence": [e.model_dump(mode="json") for e in evidence_models],
             "evidence_ids": [str(x) for x in written.evidence_ids],
             "trace_events": events,

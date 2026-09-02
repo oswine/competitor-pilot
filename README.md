@@ -26,11 +26,13 @@ flowchart TD
     UI[Next.js / TypeScript 控制台] -->|JSON API| API[FastAPI]
     API --> AUTH[Tenant API Key / RBAC / Idempotency]
     AUTH --> MODE[Auto Mode Selector]
-    MODE --> DISCOVER[Host Evidence Discovery]
-    DISCOVER -->|无显式 URL| SEARCH[Tavily Search Adapter]
-    DISCOVER -->|已有 URL| BROWSER[HTTP / Playwright Browser Pool]
+    MODE --> ROUTER[PydanticAI Pre-search Router]
+    ROUTER --> SPLAN[Structured SearchPlan]
+    SPLAN --> GATE[Host Scope / Budget Validator]
+    GATE -->|无显式 URL| SEARCH[Tavily Search Adapter]
+    GATE -->|已有 URL| BROWSER[HTTP / Playwright Browser Pool]
     SEARCH --> BROWSER
-    DISCOVER -->|checkpoint 已有证据| RESTORE[Restore Evidence]
+    GATE -->|checkpoint 已有证据| RESTORE[Restore Evidence]
     BROWSER --> GUARD[Robots / URL Policy / Injection Guard]
     RESTORE --> GUARD
     GUARD --> RAW[Raw Snapshot / PDF / DOCX / HAR / Screenshot]
@@ -38,9 +40,9 @@ flowchart TD
     RAW --> LEDGER[Immutable Evidence Ledger]
     LEDGER --> PG[(PostgreSQL)]
     LEDGER --> CARDS[Evidence Cards + Token Budget + MMR]
-    CARDS --> ROUTER[PydanticAI Router]
     ROUTER --> PLAN[Deterministic DebatePlan]
     PLAN --> RESEARCHER
+    CARDS --> RESEARCHER
     PLAN -->|pricing| PRICING[Pricing Specialist]
     PLAN -->|product / AI| PRODUCT[Product Specialist]
     PLAN -->|security / compliance| SECURITY[Security Specialist]
@@ -63,8 +65,9 @@ flowchart TD
 ## 核心能力
 
 - 根据输入自动选择 `investigation`、`monitor` 或 `verify`，并独立校验 Router 的任务类型是否与模式兼容。
-- 证据发现和安全清洗完成后，Router 给出任务类型、维度和风险提示；宿主层再生成受预算约束的 `DebatePlan`：按 `pricing`、`product`、`security` 维度激活 0-2 个领域专家，高风险时增加 Challenger；所有路径都经过终端 Arbitrator，LLM 失败时进入确定性的 ArbitratorLite。
-- 搜索不是 Agent 自主执行的工具调用。`ResearchOrchestrator` 根据显式 URL、checkpoint 和预算决定是否调用 `TavilySearch`，该适配器通过 HTTPX 请求搜索服务；随后由 `BrowserCollector` 抓取页面。Researcher 只接收经过 robots/URL 策略、提示词注入隔离、证据账本和 EvidenceCard 压缩后的内容，因此外部网页不能直接改变 Agent 流程或产生副作用。
+- Router 在任何外部搜索前一次性返回结构化 `RouterDecision`：`ResearchRoute` 决定任务类型、维度和风险，`SearchPlan` 按 `pricing`、`product`、`security` 为目标竞品生成独立查询；宿主校验竞品/维度覆盖、重复查询、搜索次数和页面预算后才允许执行。
+- 搜索不是 Agent 自主执行的工具调用。Router 只生成计划，`ResearchOrchestrator` 根据显式 URL、checkpoint 和预算决定是否执行，再由 `TavilySearch` 和 `BrowserCollector` 完成搜索与抓取。Researcher 只接收经过 robots/URL 策略、提示词注入隔离、证据账本和 EvidenceCard 压缩后的内容，因此外部网页不能改变 Agent 流程或产生副作用。
+- 宿主层根据 `ResearchRoute` 生成受预算约束的 `DebatePlan`：按维度激活 0-2 个领域专家，高风险时增加 Challenger；所有路径都经过终端 Arbitrator，LLM 失败时进入确定性的 ArbitratorLite。
 - Pydantic 模型约束 Router、Evidence、Claim、Finding、Report、预算和 trace，不依赖自由文本约定关键业务合同。
 - PydanticAI Harness 提供 DynamicWorkflow、Planning、StepPersistence 和工具输出限制；宿主层继续负责 tenant、安全、浏览、预算和发布边界。
 - PostgreSQL checkpoint 与运行租约支持三种模式中断后继续，避免两个 worker 同时恢复同一运行。
@@ -82,7 +85,7 @@ flowchart TD
 | `monitor` | 持续跟踪价格、功能、政策或安全变化 | 定时重新抓取，绕过页面缓存，以历史知识为变化基线 |
 | `verify` | 核实指定数字、日期、价格或事实 | 收窄研究范围，明确返回支持、冲突与未知项 |
 
-路由执行顺序固定为 `Router -> Researcher -> 0..2 个领域专家 -> 可选 Challenger -> Arbitrator -> Writer`。领域专家由宿主的确定性 `DebatePlan` 选择，而不是直接信任模型返回的调用数量：价格维度使用 `pricing`，AI/产品/集成使用 `product`，安全/合规使用 `security`。企业或高风险任务会限制为一个领域专家并增加 Challenger，以保持最多四次预裁决 Agent 调用；低风险任务可以没有领域专家，但仍经过 Arbitrator 终端门。
+执行顺序固定为 `Router -> SearchPlan 校验与采集 -> Researcher -> 0..2 个领域专家 -> 可选 Challenger -> Arbitrator -> Writer`。领域专家由宿主的确定性 `DebatePlan` 选择，而不是直接信任模型返回的调用数量：价格维度使用 `pricing`，AI/产品/集成使用 `product`，安全/合规使用 `security`。企业或高风险任务会限制为一个领域专家并增加 Challenger，以保持最多四次预裁决 Agent 调用；低风险任务可以没有领域专家，但仍经过 Arbitrator 终端门。
 
 `mode=auto` 先由 [mode.py](./src/ci_agent/mode.py) 识别显式模式和监控/验证信号，再由 PydanticAI Router 细化 `task_kind`、复杂度和维度，最后用 [route_policy.py](./src/ci_agent/route_policy.py) 生成可执行计划。Router 的 `required_agents` 只是建议，不能绕过宿主预算、安全和证据边界。
 

@@ -4,14 +4,14 @@ import json
 from pathlib import Path
 from typing import Any
 
-from pydantic_ai import Agent
+from pydantic_ai import Agent, PromptedOutput
 from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.openai import OpenAIProvider
 from pydantic_ai.profiles.google import google_model_profile
 from pydantic_ai_harness import DynamicWorkflow, Planning, StepPersistence, ToolOutputLimits
 from pydantic_ai_harness.step_persistence import SqliteStepStore
 
-from .models import ResearchBundle, ResearchRoute, VerifiedFinding
+from .models import ResearchBundle, RouterDecision, VerifiedFinding
 from .settings import Settings
 
 
@@ -115,13 +115,26 @@ def build_agents(settings: Settings) -> dict[str, Agent[Any, Any]]:
     router = Agent(
         build_model(settings, settings.gemai_fast_model),
         name="router",
-        output_type=ResearchRoute,
+        output_type=PromptedOutput(
+            RouterDecision,
+            name="router_decision",
+            description="A validated pre-search research route and bounded search plan.",
+            template=(
+                "Return exactly one JSON object matching this schema:\n{schema}\n"
+                "Do not wrap the JSON in Markdown or add explanatory text."
+            ),
+        ),
         instructions=(
-            "Route a competitor research task. Return task_kind, complexity, dimensions, competitors, and the "
-            "domain specialists suggested by the brief (pricing, product, or security). The host will apply a bounded "
-            "policy, so never invent agent names or exceed four pre-arbitration calls. Arbitrator is always the final "
-            "decision gate; debate_required means an adversarial challenger is also needed. Simple extraction can use "
-            "no domain specialist, but still ends at the Arbitrator gate."
+            "Before any web search, route the competitor-research task and return one RouterDecision containing both "
+            "route and search_plan. Classify requested research into pricing, product, and security dimensions. For "
+            "every requested dimension, generate focused queries that name a target competitor; when the supplied "
+            "search budget permits, generate one query for every competitor/dimension pair. Pricing queries should "
+            "prefer official pricing and billing pages, product queries official product/docs/integration/changelog "
+            "pages, and security queries official security, trust, compliance, privacy, SSO, or SCIM pages. Do not "
+            "include instructions, secrets, arbitrary URLs, or invented competitors in a query. The host validates and "
+            "executes the plan, so you cannot access the network. In route, return task_kind, complexity, dimensions, "
+            "competitors, and suggested domain specialists. Never invent agent names or exceed four pre-arbitration "
+            "calls. Arbitrator is always the final decision gate; debate_required requests an adversarial challenger."
         ),
     )
     workflow = Agent(

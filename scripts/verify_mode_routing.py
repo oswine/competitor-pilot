@@ -27,12 +27,14 @@ async def main() -> None:
             "brief": brief,
             "competitors": ["Notion", "Coda"],
             "mode": decision.selected_mode,
+            "search_budget": {"max_searches": 12, "max_pages": 30, "max_results_per_query": 5},
         }, ensure_ascii=False))
         print(json.dumps({
             "brief": brief,
             "selected_mode": decision.selected_mode,
-            "task_kind": result.output.task_kind,
-            "compatible": route_matches_mode(decision.selected_mode, result.output),
+            "task_kind": result.output.route.task_kind,
+            "compatible": route_matches_mode(decision.selected_mode, result.output.route),
+            "search_plan": result.output.search_plan.model_dump(mode="json"),
         }, ensure_ascii=False))
 
 

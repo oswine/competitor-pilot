@@ -96,6 +96,39 @@ class ResearchRoute(BaseModel):
     specialists: list[Literal["pricing", "product", "security"]] = Field(default_factory=list)
 
 
+class SearchQuery(BaseModel):
+    """One bounded, auditable query produced before any external search."""
+
+    model_config = ConfigDict(extra="forbid")
+    dimension: Literal["pricing", "product", "security"]
+    competitor: str = Field(min_length=1, max_length=120)
+    query: str = Field(min_length=8, max_length=320)
+    max_results: int = Field(default=3, ge=1, le=5)
+    source_focus: Literal[
+        "official_pricing",
+        "official_docs",
+        "security_trust",
+        "changelog",
+        "primary_source",
+    ] = "primary_source"
+
+
+class SearchPlan(BaseModel):
+    """Structured discovery plan. The host validates and executes it."""
+
+    model_config = ConfigDict(extra="forbid")
+    queries: list[SearchQuery] = Field(min_length=1, max_length=12)
+    rationale: str = Field(min_length=1, max_length=1000)
+
+
+class RouterDecision(BaseModel):
+    """Single pre-search Router result used by discovery and debate routing."""
+
+    model_config = ConfigDict(extra="forbid")
+    route: ResearchRoute
+    search_plan: SearchPlan
+
+
 class DebatePlan(BaseModel):
     """Executable specialist plan produced by the host routing policy."""
 
