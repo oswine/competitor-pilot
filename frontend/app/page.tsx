@@ -59,7 +59,7 @@ export default function Home() {
   return <div className="shell">
     <aside className="sidebar">
       <div className="brand"><span className="brand-mark">S</span><span>Signal Desk</span></div>
-      <nav className="nav"><button className="active">Research desk</button><button>Monitor jobs</button><button>Evidence ledger</button><button>Replay archive</button></nav>
+      <nav className="nav"><button className="active">Research desk</button><a href="/commerce">商品运营监控</a><button>Monitor jobs</button><button>Evidence ledger</button><button>Replay archive</button></nav>
       <div className="side-note">Evidence-grounded intelligence<br />Tenant: default</div>
     </aside>
     <main className="main">

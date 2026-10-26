@@ -24,6 +24,8 @@ from .models import Evidence, SourceType
 from .settings import Settings
 from robotexclusionrulesparser import RobotExclusionRulesParser
 from cachetools import TTLCache
+from .access import AccessGuard, validate_public_url
+from .commerce_store import CommerceStore
 
 
 INJECTION_PATTERNS = (
@@ -105,10 +107,11 @@ class BrowserCollector:
     def __init__(self, settings: Settings, ledger: EvidenceLedger, repository: PostgresRepository | None = None):
         self.settings, self.ledger = settings, ledger
         self.repository = repository
+        self.access = AccessGuard(CommerceStore(repository.engine) if repository else None)
         self.policy = BrowserPolicy(settings)
         self._domain_last: dict[str, float] = {}
-        self._robots_cache = TTLCache(maxsize=256, ttl=3600)
-        self._response_cache = TTLCache(maxsize=512, ttl=300)
+        self._robots_cache = TTLCache(maxsize=256, ttl=settings.robots_cache_ttl_seconds)
+        self._response_cache = TTLCache(maxsize=512, ttl=settings.browser_cache_ttl_seconds)
         self._pool = asyncio.Semaphore(max(1, settings.browser_pool_size))
         self._browser = None
         self._playwright = None
@@ -121,10 +124,14 @@ class BrowserCollector:
         if parser is None:
             parser = RobotExclusionRulesParser()
             try:
-                async with httpx.AsyncClient(timeout=10) as client:
-                    response = await client.get(robots_url, headers={"User-Agent": "CI-Agent/1.0"})
-                parser.parse(response.text if response.status_code < 400 else "")
+                response = await self.access.get(robots_url, interval=self.settings.domain_rate_limit_seconds,
+                    headers={"User-Agent": "CI-Agent/1.0"}, policy=self.policy, allow_missing=True)
+                parser.parse("" if response.status_code in {404, 410} else response.text)
+            except PermissionError:
+                raise
             except Exception:
+                if self.settings.robots_fail_closed:
+                    raise PermissionError("robots policy unavailable; collection paused")
                 parser.parse("")
             self._robots_cache[origin] = parser
         return parser.is_allowed("CI-Agent", url)
@@ -135,11 +142,12 @@ class BrowserCollector:
         if self._playwright is not None:
             await self._playwright.stop()
 
-    async def fetch(self, url: str, use_browser: bool = False, bypass_cache: bool = False) -> PageSnapshot:
+    async def fetch(self, url: str, use_browser: bool = False, bypass_cache: bool = False, min_interval: float | None = None, same_origin: str | None = None) -> PageSnapshot:
         self.policy.check(url)
         if not await self._allowed_by_robots(url):
             raise PermissionError(f"robots.txt disallows {url}")
         host = urlparse(url).hostname or ""
+        interval = max(self.settings.domain_rate_limit_seconds, min_interval or 0)
         now = time.monotonic()
         delay = self.settings.domain_rate_limit_seconds - (now - self._domain_last.get(host, 0))
         if delay > 0:
@@ -151,7 +159,7 @@ class BrowserCollector:
         if self.repository is not None and not use_browser and not bypass_cache:
             persisted = self.repository.get_page_cache(url)
             if persisted is not None:
-                snapshot = PageSnapshot(url, persisted.status_code, persisted.raw_bytes, persisted.clean_text, None, "persistent-cache", persisted.content_type)
+                snapshot = PageSnapshot(url, persisted.status_code, persisted.raw_bytes, persisted.clean_text, None, "persistent-cache", persisted.content_type, injection_flags=detect_prompt_injection(persisted.clean_text))
                 self._response_cache[url] = snapshot
                 return snapshot
         recording = None
@@ -162,6 +170,20 @@ class BrowserCollector:
                     self._browser = await self._playwright.chromium.launch(headless=True)
                 har_path = tempfile.mktemp(prefix="ci-recording-", suffix=".har")
                 context = await self._browser.new_context(record_har_path=har_path, record_har_content="embed")
+                async def guard_request(route):
+                    try:
+                        self.policy.check(route.request.url)
+                        await validate_public_url(route.request.url)
+                        if same_origin and (urlparse(route.request.url).scheme, urlparse(route.request.url).netloc) != (urlparse(same_origin).scheme, urlparse(same_origin).netloc):
+                            raise PermissionError("browser request escaped registered origin")
+                        await self.access.reserve(urlparse(route.request.url).hostname, interval)
+                        if route.request.is_navigation_request() and route.request.url != url:
+                            if not await self._allowed_by_robots(route.request.url):
+                                raise PermissionError("redirect disallowed by robots")
+                        await route.continue_()
+                    except (PermissionError, ValueError, OSError):
+                        await route.abort()
+                await context.route("**/*", guard_request)
                 page = await context.new_page()
                 try:
                     response = await page.goto(url, wait_until="domcontentloaded", timeout=30_000)
@@ -169,17 +191,18 @@ class BrowserCollector:
                     raw = await page.content()
                     screenshot = await page.screenshot(full_page=True)
                     status = response.status if response else 0
+                    self.access.inspect(host, status, await response.all_headers() if response else {}, raw)
                 finally:
                     await context.close()
                 if os.path.exists(har_path):
                     recording = open(har_path, "rb").read()
                     os.unlink(har_path)
             else:
-                async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
-                    response = await client.get(url, headers={"User-Agent": "CI-Agent/0.1 (+research)"})
-                    response.raise_for_status()
-                    content_type = response.headers.get("content-type", "text/html").split(";", 1)[0].lower()
-                    raw, status, screenshot = response.content, response.status_code, None
+                response = await self.access.get(url, interval=interval,
+                    headers={"User-Agent": "CI-Agent/1.0"}, policy=self.policy, same_origin=same_origin,
+                    redirect_check=self._allowed_by_robots)
+                content_type = response.headers.get("content-type", "text/html").split(";", 1)[0].lower()
+                raw, status, screenshot = response.content, response.status_code, None
         if use_browser:
             content_type = "text/html"
         if content_type == "application/pdf" or url.lower().endswith(".pdf"):

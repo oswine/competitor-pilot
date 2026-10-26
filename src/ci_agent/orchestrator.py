@@ -29,12 +29,18 @@ class ResearchOrchestrator:
         self.settings = settings
         self.ledger = EvidenceLedger(settings.object_store_root / "evidence")
         self.search = TavilySearch(settings)
-        self.agents = build_agents(settings)
+        self._agents = None
         self.repository = PostgresRepository(settings.database_url) if settings.postgres_enabled else None
         self.browser = BrowserCollector(settings, self.ledger, self.repository)
         self.objects = ObjectStore(settings.minio_endpoint, settings.minio_access_key, settings.minio_secret_key,
                                    settings.minio_bucket, settings.object_store_root)
         self.playbooks = ResearchPlaybookStore(settings.object_store_root / "playbooks")
+
+    @property
+    def agents(self):
+        if self._agents is None:
+            self._agents = build_agents(self.settings)
+        return self._agents
 
     async def _bounded_agent_call(self, agent_name: str, prompt: str, trace: RunTrace, budget: RunBudget, retries: int = 2):
         last_error: Exception | None = None
@@ -475,6 +481,8 @@ class ResearchOrchestrator:
                     PAGES.labels(snapshot.content_type, "success").inc()
                 except Exception as exc:
                     trace.add("page_fetch_failed", url=url, error=type(exc).__name__, detail=str(exc)[:240])
+                    if isinstance(exc, PermissionError):
+                        continue
                     if not url.lower().endswith((".pdf", ".docx")):
                         try:
                             snapshot = await self.browser.fetch(url, use_browser=True, bypass_cache=request.mode == "monitor")

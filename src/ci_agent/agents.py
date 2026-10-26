@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import weakref
+import httpx
 from pathlib import Path
 from typing import Any
 
@@ -15,6 +17,16 @@ from .models import ResearchBundle, RouterDecision, VerifiedFinding
 from .settings import Settings
 
 
+_model_clients = weakref.WeakSet()
+
+
+async def close_model_clients() -> None:
+    """Close caller-owned proxy clients at API/worker shutdown."""
+    for client in list(_model_clients):
+        await client.aclose()
+        _model_clients.discard(client)
+
+
 def build_model(settings: Settings, model_id: str) -> OpenAIChatModel:
     if not settings.gemai_api_key:
         raise RuntimeError("GEMAI_API_KEY is required for a live smoke test")
@@ -22,7 +34,14 @@ def build_model(settings: Settings, model_id: str) -> OpenAIChatModel:
     # native Gemini profile makes PydanticAI rewrite Harness JSON schemas to
     # Gemini's supported subset before sending them through that transport.
     bare_model_id = model_id.rsplit("]", 1)[-1]
-    kwargs = {"provider": OpenAIProvider(base_url=settings.gemai_base_url, api_key=settings.gemai_api_key)}
+    provider_options = {"base_url": settings.gemai_base_url, "api_key": settings.gemai_api_key}
+    if settings.model_proxy_url:
+        # Explicit model-only transport: never reuse it for collected webpages.
+        client = httpx.AsyncClient(proxy=settings.model_proxy_url, trust_env=False,
+                                   timeout=httpx.Timeout(120, connect=15))
+        _model_clients.add(client)
+        provider_options["http_client"] = client
+    kwargs = {"provider": OpenAIProvider(**provider_options)}
     # Gemini-compatible routes need the Google profile; OpenAI-native routes
     # accept Harness's tool schema without rewriting it.
     if bare_model_id.startswith("gemini-"):

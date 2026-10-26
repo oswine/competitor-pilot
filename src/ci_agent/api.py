@@ -2,13 +2,17 @@ from uuid import UUID
 from contextlib import asynccontextmanager
 import asyncio
 from fastapi import Depends, FastAPI, Header, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from fastapi.middleware.cors import CORSMiddleware
+from .commerce import CommerceService
+from .commerce_api import commerce_router, EnabledBody
 from .models import ResearchRequest, TenantContext
 from .orchestrator import ResearchOrchestrator
 from .persistence import PostgresRepository
 from .security import ApiKeyManager
 from .settings import settings
 from .telemetry import configure_telemetry
+from .agents import close_model_clients
 from .metrics import start_metrics_server
 from .object_store import ObjectStore
 from .replay import load_persisted_replay, export_bundle, export_markdown
@@ -30,8 +34,11 @@ objects = ObjectStore(settings.minio_endpoint, settings.minio_access_key, settin
 async def lifespan(_app: FastAPI):
     yield
     await orchestrator.browser.close()
+    await close_model_clients()
 
 app = FastAPI(title="Competitor Intelligence Agent", version="1.0.0", lifespan=lifespan)
+app.add_middleware(CORSMiddleware, allow_origins=settings.frontend_origins.split(","),
+                   allow_methods=["GET", "POST", "PATCH"], allow_headers=["Content-Type", "X-API-Key", "X-User-Id", "Idempotency-Key"])
 
 def authenticated_context(x_api_key: str = Header(...), x_user_id: str = Header(...)) -> TenantContext:
     try:
@@ -98,7 +105,7 @@ async def export_run(run_id: UUID, format: str = "json", context: TenantContext 
 
 class MonitorBody(BaseModel):
     request: ResearchRequest
-    interval_seconds: int = 3600
+    interval_seconds: int = Field(default=3600, ge=60, le=2592000)
 
 @app.post("/v1/monitor-jobs")
 async def create_monitor(body: MonitorBody, context: TenantContext = Depends(authenticated_context)) -> dict[str, str]:
@@ -111,7 +118,21 @@ async def create_monitor(body: MonitorBody, context: TenantContext = Depends(aut
 
 @app.get("/v1/monitor-jobs")
 async def list_monitors(context: TenantContext = Depends(authenticated_context)) -> list[dict[str, object]]:
-    return [{"job_id": row.job_id, "request": row.request_json, "interval_seconds": row.interval_seconds, "enabled": row.enabled} for row in repository.list_monitor_jobs(context.tenant_id)]
+    return [{"job_id": row.job_id, "request": row.request_json, "interval_seconds": row.interval_seconds,
+             "enabled": row.enabled, "attempts": row.attempts, "last_error": row.last_error,
+             "next_run_at": row.next_run_at, "last_run_at": row.last_run_at, "locked_until": row.locked_until}
+            for row in repository.list_monitor_jobs(context.tenant_id)]
+
+@app.patch("/v1/monitor-jobs/{job_id}")
+async def set_monitor_status(job_id: UUID, body: EnabledBody, context: TenantContext = Depends(authenticated_context)):
+    if context.role not in {"researcher", "admin"}:
+        raise HTTPException(403, "researcher role required")
+    try:
+        repository.set_monitor_enabled(context.tenant_id, str(job_id), body.enabled)
+    except KeyError as exc:
+        raise HTTPException(404, "job not found") from exc
+    repository.audit(context.tenant_id, context.user_id, "monitor.enabled", {"job_id": str(job_id), "enabled": body.enabled})
+    return {"job_id": str(job_id), "enabled": body.enabled}
 
 @app.get("/v1/playbooks")
 async def list_playbooks(context: TenantContext = Depends(authenticated_context)) -> dict[str, object]:
@@ -156,3 +177,6 @@ async def rotate_key(body: RotationBody, context: TenantContext = Depends(authen
     new_key = key_manager.rotate(context, body.current_key, settings.api_key_grace_seconds)
     repository.audit(context.tenant_id, context.user_id, "api_key.rotated", {"key": new_key})
     return {"api_key": new_key, "grace_seconds": str(settings.api_key_grace_seconds)}
+
+commerce_service = CommerceService(settings, repository, objects, orchestrator.browser)
+app.include_router(commerce_router(commerce_service, authenticated_context))

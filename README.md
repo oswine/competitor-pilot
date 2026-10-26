@@ -1,5 +1,7 @@
 # Competitor Intelligence Agent
 
+新增商品运营监控模块：授权 JSON Feed / Product JSON-LD、商品/SKU 快照、价格与促销等字段变化、评价主题与运营建议、周期任务和域名限流暂停。前端入口为 /commerce，配置、接口与验证说明见 [COMMERCE.md](./COMMERCE.md)。具体平台仍需登记授权来源并完成联调。
+
 Competitor Intelligence Agent 是一个面向产品、价格、能力、安全与市场变化研究的生产化多智能体系统，基于 PydanticAI 2.x、官方 `pydantic-ai-harness` 和 `pydantic-evals` 构建。系统将自动模式选择、网页采集、不可变证据账本、上下文压缩、受约束辩论、断点恢复、持续监控、人工审批和研究质量评测组合在同一条业务链路中。
 
 项目强调“证据先于结论”：每个 Claim 必须引用当前 tenant、当前运行中的 Evidence；数字、价格、日期和战略判断不能绕过证据契约直接进入报告。完整设计与当前实现边界分别见 [完整落地项目规划.md](./完整落地项目规划.md) 和 [IMPLEMENTATION_STATUS.md](./IMPLEMENTATION_STATUS.md)。

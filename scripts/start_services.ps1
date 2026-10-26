@@ -22,10 +22,14 @@ if (-not (Test-Path (Join-Path $pgData 'PG_VERSION'))) {
 }
 
 if (-not (Test-NetConnection 127.0.0.1 -Port 5432 -InformationLevel Quiet)) {
-    & (Join-Path $pgBin 'pg_ctl.exe') -D $pgData -l $pgLog -o '-p 5432' start | Out-Host
+    $pgStart = Start-Process -FilePath (Join-Path $pgBin 'pg_ctl.exe') -ArgumentList @('-D', $pgData, '-l', $pgLog, '-o', '"-p 5432"', 'start') -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $dataRoot 'postgres-start.log') -RedirectStandardError (Join-Path $dataRoot 'postgres-start-error.log')
+    # PowerShell -Wait also waits for descendant postgres processes (a daemon).
+    # Wait for pg_ctl itself, with a bound, while leaving the server running.
+    if (-not $pgStart.WaitForExit(30000)) { throw 'PostgreSQL startup command timed out; inspect the startup logs.' }
+    if ($pgStart.ExitCode -ne 0) { throw 'PostgreSQL startup failed; inspect data/postgres-start-error.log.' }
 }
 
-$minio = Get-ChildItem "$env:LOCALAPPDATA\Microsoft\WinGet\Packages" -Recurse -Filter minio.exe -ErrorAction SilentlyContinue | Where-Object Length -gt 1000000 | Select-Object -First 1
+$minio = Get-ChildItem "$env:LOCALAPPDATA\Microsoft\WinGet\Packages" -Directory -Filter 'MinIO.Server*' | Get-ChildItem -Recurse -Filter minio.exe -ErrorAction SilentlyContinue | Where-Object Length -gt 1000000 | Select-Object -First 1
 if ($null -eq $minio) { throw 'MinIO was not found through WinGet.' }
 if (-not (Test-NetConnection 127.0.0.1 -Port 9000 -InformationLevel Quiet)) {
     $env:MINIO_ROOT_USER = 'ci-minio'
@@ -34,7 +38,7 @@ if (-not (Test-NetConnection 127.0.0.1 -Port 9000 -InformationLevel Quiet)) {
     $minioPid = $p.Id
 }
 
-$jaeger = Get-ChildItem "$env:LOCALAPPDATA\Microsoft\WinGet\Packages" -Recurse -Filter jaeger.exe -ErrorAction SilentlyContinue | Where-Object Length -gt 1000000 | Select-Object -First 1
+$jaeger = Get-ChildItem "$env:LOCALAPPDATA\Microsoft\WinGet\Packages" -Directory -Filter 'jaegertracing.jaeger*' | Get-ChildItem -Recurse -Filter jaeger.exe -ErrorAction SilentlyContinue | Where-Object Length -gt 1000000 | Select-Object -First 1
 if ($null -eq $jaeger) { throw 'Jaeger was not found through WinGet.' }
 if (-not (Test-NetConnection 127.0.0.1 -Port 16686 -InformationLevel Quiet)) {
     $p = Start-Process $jaeger.FullName -WorkingDirectory $ProjectRoot -WindowStyle Hidden -PassThru

@@ -1,27 +1,30 @@
 from pathlib import Path
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
-    gemai_api_key: str = ""
+    gemai_api_key: str = Field(default="", repr=False)
     gemai_base_url: str = "https://api.gemai.cc/v1"
+    model_proxy_url: str | None = Field(default=None, repr=False)
     gemai_fast_model: str = "[满血A]gemini-2.5-flash"
     gemai_research_model: str = "deepseek-v4-flash"
     gemai_synthesis_model: str = "deepseek-v4-flash"
     gemai_judge_model: str = "claude-sonnet-5"
-    tavily_api_key: str = ""
-    database_url: str = "postgresql+psycopg://ci@127.0.0.1:5432/ci_agent"
+    tavily_api_key: str = Field(default="", repr=False)
+    database_url: str = Field(default="postgresql+psycopg://ci@127.0.0.1:5432/ci_agent", repr=False)
     object_store_root: Path = Path("data/objects")
     postgres_enabled: bool = True
     minio_endpoint: str = "http://127.0.0.1:9000"
     minio_access_key: str = "ci-minio"
-    minio_secret_key: str = "ci-minio-secret"
+    minio_secret_key: str = Field(default="ci-minio-secret", repr=False)
     minio_bucket: str = "ci-artifacts"
     otel_enabled: bool = True
     tenant_default: str = "default"
+    frontend_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
     api_key_grace_seconds: int = 86400
-    service_api_key: str = ""
+    service_api_key: str = Field(default="", repr=False)
     allowed_domains: str = "*"
     max_searches: int = 12
     max_pages: int = 30
@@ -32,7 +35,7 @@ class Settings(BaseSettings):
     domain_rate_limit_seconds: float = 0.5
     browser_cache_ttl_seconds: int = 300
     robots_cache_ttl_seconds: int = 3600
-    robots_fail_closed: bool = False
+    robots_fail_closed: bool = True
     run_timeout_seconds: int = 900
     research_context_token_budget: int = 10_000
     evidence_card_token_budget: int = 600

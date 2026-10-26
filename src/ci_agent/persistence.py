@@ -90,6 +90,7 @@ class MonitorJobRecord(Base):
     max_attempts: Mapped[int] = mapped_column(Integer, default=5)
     last_error: Mapped[str | None] = mapped_column(Text, nullable=True)
     locked_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+    worker_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
 
 
 class RunCheckpointRecord(Base):
@@ -117,6 +118,7 @@ class VerifiedKnowledgeRecord(Base):
 
 class PostgresRepository:
     def __init__(self, database_url: str):
+        from . import commerce_store  # Register commerce tables before create_all.
         self.engine = create_engine(database_url.replace("postgresql+asyncpg", "postgresql+psycopg2").replace("postgresql+psycopg://", "postgresql+psycopg2://"), pool_pre_ping=True)
         Base.metadata.create_all(self.engine)
         # create_all does not alter an existing local database; keep this tiny migration idempotent.
@@ -128,6 +130,7 @@ class PostgresRepository:
                 "ALTER TABLE monitor_jobs ADD COLUMN IF NOT EXISTS max_attempts INTEGER NOT NULL DEFAULT 5",
                 "ALTER TABLE monitor_jobs ADD COLUMN IF NOT EXISTS last_error TEXT",
                 "ALTER TABLE monitor_jobs ADD COLUMN IF NOT EXISTS locked_until TIMESTAMPTZ",
+                "ALTER TABLE monitor_jobs ADD COLUMN IF NOT EXISTS worker_id VARCHAR(64)",
             ):
                 connection.execute(text(statement))
 
@@ -316,6 +319,8 @@ class PostgresRepository:
             s.commit()
 
     def create_monitor_job(self, tenant_id: str, request: Any, interval_seconds: int) -> str:
+        if not 60 <= interval_seconds <= 2592000:
+            raise ValueError("monitor interval must be between 60 seconds and 30 days")
         import uuid
         job_id = str(uuid.uuid4())
         with Session(self.engine) as s:
@@ -326,34 +331,65 @@ class PostgresRepository:
 
     def list_monitor_jobs(self, tenant_id: str) -> list[MonitorJobRecord]:
         with Session(self.engine) as s:
-            return list(s.scalars(select(MonitorJobRecord).where(MonitorJobRecord.tenant_id == tenant_id, MonitorJobRecord.enabled.is_(True))))
+            return list(s.scalars(select(MonitorJobRecord).where(MonitorJobRecord.tenant_id == tenant_id)))
 
-    def claim_due_monitor_jobs(self, worker_id: str, limit: int = 10) -> list[MonitorJobRecord]:
+    def claim_due_monitor_jobs(self, worker_id: str, limit: int = 1, tenant_id: str | None = None) -> list[MonitorJobRecord]:
         """Claim due jobs with row locks; expired locks are recoverable after worker death."""
-        with Session(self.engine) as s:
+        with Session(self.engine, expire_on_commit=False) as s:
             now = datetime.now(timezone.utc)
-            rows = list(s.scalars(select(MonitorJobRecord).where(MonitorJobRecord.enabled.is_(True), MonitorJobRecord.next_run_at <= now, (MonitorJobRecord.locked_until.is_(None) | (MonitorJobRecord.locked_until < now))).order_by(MonitorJobRecord.next_run_at).limit(limit).with_for_update(skip_locked=True)))
+            query = select(MonitorJobRecord).where(MonitorJobRecord.enabled.is_(True), MonitorJobRecord.next_run_at <= now, (MonitorJobRecord.locked_until.is_(None) | (MonitorJobRecord.locked_until < now)))
+            if tenant_id is not None:
+                query = query.where(MonitorJobRecord.tenant_id == tenant_id)
+            rows = list(s.scalars(query.order_by(MonitorJobRecord.next_run_at).limit(limit).with_for_update(skip_locked=True)))
             for row in rows:
-                row.locked_until = now.replace(microsecond=0) + __import__("datetime").timedelta(minutes=15)
-                row.last_error = None
+                row.locked_until = now + timedelta(seconds=90)
+                row.worker_id = worker_id
             s.commit()
             return rows
 
-    def complete_monitor_job(self, job_id: str, interval_seconds: int) -> None:
+    def renew_monitor_job(self, job_id: str, worker_id: str) -> bool:
         with Session(self.engine) as s:
-            row = s.get(MonitorJobRecord, job_id)
+            row = s.scalar(select(MonitorJobRecord).where(MonitorJobRecord.job_id == job_id).with_for_update())
+            now = datetime.now(timezone.utc)
+            if not row or row.worker_id != worker_id or not row.locked_until or row.locked_until <= now:
+                return False
+            row.locked_until = now + timedelta(seconds=90)
+            s.commit()
+            return True
+
+    def complete_monitor_job(self, job_id: str, interval_seconds: int, worker_id: str | None = None) -> None:
+        with Session(self.engine) as s:
+            row = s.scalar(select(MonitorJobRecord).where(MonitorJobRecord.job_id == job_id).with_for_update())
+            if worker_id and (not row or row.worker_id != worker_id or row.locked_until <= datetime.now(timezone.utc)):
+                raise RuntimeError("monitor lease lost")
             if row:
+                row.worker_id = None
                 now = datetime.now(timezone.utc); row.last_run_at = now; row.next_run_at = now + __import__("datetime").timedelta(seconds=interval_seconds); row.attempts = 0; row.locked_until = None; row.last_error = None; s.commit()
 
-    def fail_monitor_job(self, job_id: str, error: str) -> None:
+    def fail_monitor_job(self, job_id: str, error: str, worker_id: str | None = None) -> None:
         with Session(self.engine) as s:
-            row = s.get(MonitorJobRecord, job_id)
+            row = s.scalar(select(MonitorJobRecord).where(MonitorJobRecord.job_id == job_id).with_for_update())
+            if worker_id and (not row or row.worker_id != worker_id):
+                return
             if row:
+                row.worker_id = None
                 row.attempts += 1; row.last_error = redact(error)[:2000]; row.locked_until = None
                 delay = min(3600, 2 ** min(row.attempts, 10) * 30)
                 row.next_run_at = datetime.now(timezone.utc) + __import__("datetime").timedelta(seconds=delay)
                 if row.attempts >= row.max_attempts: row.enabled = False
                 s.commit()
+
+    def set_monitor_enabled(self, tenant_id: str, job_id: str, enabled: bool) -> None:
+        with Session(self.engine) as s:
+            row = s.scalar(select(MonitorJobRecord).where(MonitorJobRecord.job_id == job_id,
+                           MonitorJobRecord.tenant_id == tenant_id).with_for_update())
+            if row is None:
+                raise KeyError("monitor job not found")
+            row.enabled = enabled
+            if enabled:
+                row.attempts = 0
+                row.next_run_at = datetime.now(timezone.utc)
+            s.commit()
 
 
 def redact(value: Any) -> Any:
